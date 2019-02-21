@@ -1,3 +1,8 @@
+###############################################
+# Sam Vanhoutte - PG Applied AI - Programming
+# Unit tests, for the minimum edit distance
+###############################################
+
 import unittest                     # unit testing ftw
 from excercise import Excercise     # importing the actual code
 

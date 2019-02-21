@@ -1,11 +1,37 @@
+###############################################
+# Sam Vanhoutte - PG Applied AI - Programming
+# Regex excercises, tested with unit tests
+###############################################
+
 import unittest                     # unit testing ftw
 import re                           # regular expressions
 
-# class RegexTester:
-#     @staticmethod
-#     def match_regex(testCase, expression, valueToMatch, shouldMatch):
-#         regEx = re.compile(expression)
-#         testCase.assertEqual(shouldMatch, regEx.match(valueToMatch))
+# All regex expressions in order of appearance are below
+# .{3}\.
+# (c|m|f)an
+# [^b]og
+# Method 1 : [A-Z]\w{2}
+# Method 2 : [A-Z]..
+# Method 3 : [A-Z][a-zA-Z][a-zA-Z]
+# waz{2,}up
+# a{2,4}b{,4}c{1,2}
+# \d+ files? found\?
+# \d+ files? found\?
+# \d+.\s+abc
+# ^[M|m]ission: 
+# I love (cats|dogs)
+# (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?:\s)(\d\d\d\d)
+# (.*)(?:.pdf(\s|$))
+# ^(-|\+)?\d+(.|,)?\d+(\.\d+)?\d*e?\d*$
+# (\d{3})
+# (.+?)(?:(\+.*))*(?:@)((?:\w{2,})(?:.))+
+# ^(?:<)([\w]+)(?:.*>)
+# (.+)(?:\.(jpe?g|gif|png)(\s|$))
+# (?:^\s*)(.*?)(?:\s*$)
+# (?:.*)(?:at widget.List.)(.*)\((.*):(\d+)\)
+# ([a-zA-Z]+)(?::\/\/)(.+?)(?::)?(\d*)(?:\/)
+# (.*)(?<!([A-Z]|\.| ))((?:\.|\?|!)(?!(\d|,|\w|(\",))))
+# \"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?       # >> validation of e-mail addresses (though the ? mark character seems not legal in email?)
 
 
 class RegexTestMethods(unittest.TestCase):
@@ -77,7 +103,7 @@ class RegexTestMethods(unittest.TestCase):
 
     def test_excercise_06(self):
         # Matching 2 to 4 a’s followed by 0 to 4 b’s and 1 to 2 c’s
-        expression = r'a{2,4}b{0,4}c{1,2}'
+        expression = r'a{2,4}b{,4}c{1,2}'
         self.match_regex(expression, r'aaaabcc', True)
         self.match_regex(expression, r'aabbbbc', True)
         self.match_regex(expression, r'aacc', True)
@@ -124,11 +150,11 @@ class RegexTestMethods(unittest.TestCase):
 
     def test_excercise_12(self):
         # Matching a date (three letter month, 4 digit year), eliminating whitespace, catching the full date, and the year (hint, nested sub-groups)
-        expression = r'((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d\d\d\d)'
+        expression = r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?:\s)(\d\d\d\d)'
         # Not sure about the nest sub groups ?
-        self.get_regex_value(expression, r'    Jan 1987', 'Jan 1987')
-        self.get_regex_value(expression, r'  May 1969   ', 'May 1969')
-        self.get_regex_value(expression, r'Aug 2011       ', 'Aug 2011')
+        self.get_regex_values(expression, r'    Jan 1987', ['Jan', '1987'])
+        self.get_regex_values(expression, r'  May 1969   ', ['May','1969'])
+        self.get_regex_values(expression, r'Aug 2011       ', ['Aug','2011'])
 
     def test_excercise_13(self):
         # Matching .pdf files and capturing their name (without path!)
@@ -157,6 +183,7 @@ class RegexTestMethods(unittest.TestCase):
     def test_excercise_15(self):
         # Matching phone numbers
         expression = r'(\d{3})'
+        # this might be too easy? (it just takes the 1st occurrance of 3 digits)
         self.get_regex_value(expression, r'415-555-1234', '415')
         self.get_regex_value(expression, r'650-555-2345', '650')
         self.get_regex_value(expression, r'(416)555-3456', '416')
@@ -168,7 +195,7 @@ class RegexTestMethods(unittest.TestCase):
         # Matching eMails
         # The first 'non greedy' part is important, to force the split at the optional + character
         # Also making sure the domain name is at least 2 chars and contains a dot, followed by other characters
-        expression = r'(.+?)(?:(\+.*))*(?:@)((?:[a-zA-Z]{2,})(?:.))+'
+        expression = r'(.+?)(?:(\+.*))*(?:@)((?:\w{2,})(?:.))+'
         self.get_regex_value(expression, r'tom@hogwarts.com', 'tom')
         self.get_regex_value(expression, r'tom.riddle@hogwarts.com', 'tom.riddle')
         self.get_regex_value(expression, r'tom.riddle+regexone@hogwarts.com', 'tom.riddle')
@@ -224,7 +251,10 @@ class RegexTestMethods(unittest.TestCase):
 
     def test_excercise_22(self):
         # Detecting the end of a sentence
-        expression = r'(.*)(?:\.|\?|!)'
+        # This is mostly about excluding cases, by leveraging two concepts:
+        # Negative Look behind (?<!) to make sure dots preceded with capital letters or another dot or space are excluded
+        # Negative Look ahead (?!) to make sure dots immediately followed by digits, text characters or ", are excluded
+        expression = r'(.*)(?<!([A-Z]|\.| ))((?:\.|\?|!)(?!(\d|,|\w|(\",))))'
         self.match_regex(expression, r'assumes word senses. Within', True)
         self.match_regex(expression, r'does the clustering. In the', True)
         self.match_regex(expression, r'but when? It was hard to tel', True)
@@ -242,10 +272,19 @@ class RegexTestMethods(unittest.TestCase):
 
     def test_excercise_23(self):
         # What does the reg-exp match
+        # This expression matches emails
+        # However the special characters (question mark and quote) are unclear to me.
         expression = r'\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?'
-        self.match_regex(expression, r'assumes word senses. Within', True)
-        self.match_regex(expression, r'does the clustering. In the', False)
+        self.match_regex(expression, r'valid.email@address.be', True)
+        self.match_regex(expression, r'validemail@address.be', True)
+        self.match_regex(expression, r'whycanwehavethesechars?@address.be', True)
+        self.match_regex(expression, r'sam@howest', False)
+        self.match_regex(expression, r'sam?howest.be', False)
 
+
+
+
+    # Validation methods
     def match_regex(self, expression, valueToMatch, shouldMatch):
         # Asserts if the expression matches (or not) for the value
         regEx = re.compile(expression)
@@ -277,21 +316,3 @@ class RegexTestMethods(unittest.TestCase):
                 # check the 1st group (group() and group(0) get all values)
                 self.assertEqual(expectedValue, searchResult.group(idx)) 
                 idx += 1 
-
-
-# (.*)(?:\.|\?|!)
-
-#     assumes word senses. Within
-# does the clustering. In the
-# but when? It was hard to tel
-# he arrive." After she had
-# mess! He did not let it
-# t wasn't hers!' She replied
-# always thought so.) Then
-# in the U.S.A., people often
-# John?", he often thought, but
-# weighed 17.5 grams
-# well ... they'd better not
-# A.I. has long been a very
-# like that", he thought
-# but W. G. Grace never had much 

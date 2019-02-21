@@ -1,3 +1,8 @@
+###############################################
+# Sam Vanhoutte - PG Applied AI - Programming
+# Performance tests, executed through timeit
+###############################################
+
 import random
 import string
 import numpy
@@ -20,15 +25,19 @@ def perfTest(stringLength01, stringLength02, executions, repeat = 10):
     results = []
     # Not using the timeit.repeat (as it requires string statements)
     for _ in range(0, repeat):
+        # generate 2 random strings, based on the input
         value01 = ''.join(random.choices(string.ascii_uppercase, k=stringLength01))
         value02 = ''.join(random.choices(string.ascii_uppercase, k=stringLength02))
+        # set up delegate
         wrapped = wrapper(measure, value01, value02)
+        # measure the execution times - one for every execution
         results.append(timeit.timeit(wrapped, number=executions))
-    # Take the mean, though some say the minimum should be taken
+    
+    # Take the mean, though some say the minimum should be taken - or the average of the mid 8 results
     print(stringLength01, stringLength02, numpy.mean(results), executions, sep=";")
 
 
-# Run and print duration of different string comparisons
+# Run and print duration of different string comparisons - can be exported to csv
 print('stringLength01;stringLength02;duration')
 perfTest(1,1,100)
 perfTest(4,5,100)

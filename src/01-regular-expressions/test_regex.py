@@ -224,7 +224,7 @@ class RegexTestMethods(unittest.TestCase):
 
     def test_excercise_22(self):
         # Detecting the end of a sentence
-        expression = r'^(-|\+)?\d+(.|,)?\d+(\.\d+)?\d*e?\d*$'
+        expression = r'(.*)(?:\.|\?|!)'
         self.match_regex(expression, r'assumes word senses. Within', True)
         self.match_regex(expression, r'does the clustering. In the', True)
         self.match_regex(expression, r'but when? It was hard to tel', True)

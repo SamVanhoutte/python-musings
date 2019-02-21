@@ -1,6 +1,6 @@
 ###############################################
 # Sam Vanhoutte - PG Applied AI - Programming
-# Inspired by: https://github.com/trekhleb/javascript-algorithms/tree/master/src/algorithms/string/levenshtein-distance
+# Actual logic / method
 ###############################################
 
 import numpy        # will be used for all matrix operations

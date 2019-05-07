@@ -1,4 +1,5 @@
 # Big-O notation and algorithm analysis
+
 This sample shows a generic class that can be used to analyze algorithms and plot the impact of 'N' on the actual performance and duration of an algorithm.
 
 In order to analyse it, an array of 'n-values' has to be built and given to a lambda(x) that calls the actual algorithm to be tested.  The class also allows for data generation, in this case the random generation of an RGB image of a given width/height.

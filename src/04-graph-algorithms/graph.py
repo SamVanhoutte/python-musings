@@ -1,3 +1,5 @@
+import numpy as np
+
 class Vertex:
 	def __init__(self, n):
 		self.name = n
@@ -27,7 +29,13 @@ class Graph:
 		else:
 			print('could not add edge', u, v)
 			return False
-			
+	
+	def get_neighbors(self, vertex_name):
+		if vertex_name in self.vertices:
+			vertex_edges = np.array(list(self.edges[self.edge_indices[vertex_name]]))
+			edge_array = np.array(list(self.vertices.keys()))
+			return list(edge_array[vertex_edges > 0])
+
 	def print_graph(self):
 		for v, i in sorted(self.edge_indices.items()):
 			print(str(v) + ' ', end='')

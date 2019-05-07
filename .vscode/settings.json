@@ -1,14 +1,14 @@
 {
-    "python.unitTest.unittestArgs": [
+    "python.testing.unittestArgs": [
         "-v",
         "-s",
         "./src/01-minimal-edit-distance",
         "-p",
         "test*.py"
     ],
-    "python.unitTest.pyTestEnabled": false,
-    "python.unitTest.nosetestsEnabled": false,
-    "python.unitTest.unittestEnabled": true,
+    "python.testing.pyTestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.unittestEnabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe"

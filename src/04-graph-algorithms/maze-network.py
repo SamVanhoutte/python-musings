@@ -1,5 +1,3 @@
-import sys
-import random
 import graph as gr
 
 # Solve maze using Pre-Order DFS algorithm, terminate with solution

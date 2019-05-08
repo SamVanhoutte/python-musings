@@ -58,11 +58,11 @@ def generate_maze(dimensions = 8):
         maze.add_edge(int(edge.split(':')[0]), int(edge.split(':')[1]))
     return maze
 
-maze = generate_maze()
+#maze = generate_maze()
 #maze.print_graph()
 #for n in maze.get_neighbors(3):
 #    n.print()
-walked_path_vertices = walk_depth_first(maze, 0, 15)
-for path_vertex in walked_path_vertices:
-    path_vertex.print()
+#walked_path_vertices = walk_depth_first(maze, 0, 15)
+#for path_vertex in walked_path_vertices:
+#    path_vertex.print()
 #print(walked_path_vertices)

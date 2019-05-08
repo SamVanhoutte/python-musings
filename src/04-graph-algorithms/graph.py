@@ -15,6 +15,7 @@ class Vertex:
 			print('Vertex', self.name, ':', self.state)
 
 class Graph:
+	# def __init__(self, n):
 	vertices = {}
 	edges = []
 	edge_indices = {}
@@ -22,8 +23,8 @@ class Graph:
 	def add_vertex(self, vertex):
 		if isinstance(vertex, Vertex) and vertex.name not in self.vertices:
 			self.vertices[vertex.name] = vertex
-			for row in self.edges:
-				row.append(0)
+			for edge in self.edges:
+				edge.append(0)
 			self.edges.append([0] * (len(self.edges)+1))
 			self.edge_indices[vertex.name] = len(self.edge_indices)
 			return True
@@ -45,7 +46,7 @@ class Graph:
 			vertex_edges = np.array(list(self.edges[self.edge_indices[vertex_name]]))
 			edge_array = np.array(list(self.vertices.keys()))
 			neighboring_vertices = [self.vertices.get(key) for key in list(edge_array[vertex_edges > 0])]
-			return [v for v in neighboring_vertices if v.state != VertexState.Closed]
+			return [v for v in neighboring_vertices if v.state != VertexState.Closed and v.name != vertex_name]
 
 	def print_graph(self):
 		for v, i in sorted(self.edge_indices.items()):

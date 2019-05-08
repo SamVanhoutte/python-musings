@@ -1,8 +1,18 @@
 import numpy as np
+from enum import Enum
+
+class VertexState(Enum):
+	Open = 0
+	Wip = 1
+	Closed = -1
 
 class Vertex:
 	def __init__(self, n):
 		self.name = n
+		self.state = VertexState.Open
+
+	def print(self):
+			print('Vertex', self.name, ':', self.state)
 
 class Graph:
 	vertices = {}
@@ -34,11 +44,17 @@ class Graph:
 		if vertex_name in self.vertices:
 			vertex_edges = np.array(list(self.edges[self.edge_indices[vertex_name]]))
 			edge_array = np.array(list(self.vertices.keys()))
-			return list(edge_array[vertex_edges > 0])
+			neighboring_vertices = [self.vertices.get(key) for key in list(edge_array[vertex_edges > 0])]
+			return [v for v in neighboring_vertices if v.state != VertexState.Closed]
 
 	def print_graph(self):
 		for v, i in sorted(self.edge_indices.items()):
 			print(str(v) + ' ', end='')
 			for j in range(len(self.edges)):
 				print(self.edges[i][j], end='')
-			print(' ')    
+			print(' ')	
+
+	def print_status(self):
+		for vertex in self.vertices.values():
+    			vertex.print()
+			

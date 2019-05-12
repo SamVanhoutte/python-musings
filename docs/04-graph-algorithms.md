@@ -2,6 +2,13 @@
 
 These excercices show algorithms to process graphs etc.
 
+## Required packages
+
+Install the following packages, with pip3 install
+
+- unittest: used for the unit tests 
+- numpy: used for some array operations
+
 ## Source files description
 
 __Algorithms__: [graphsearch.py](../src/04-graph-algorithms/graphsearch.py)

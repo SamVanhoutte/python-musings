@@ -6,10 +6,15 @@
         "-p",
         "test*.py"
     ],
-    "python.testing.pyTestEnabled": false,
+    "python.testing.pyTestEnabled": true,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.unittestEnabled": true,
+    "python.testing.unittestEnabled": false,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe"
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Anaconda3_64\\python.exe",
+    "python.testing.pyTestArgs": [
+        "."
+    ],
+    "pythonTestExplorer.testFramework": "pytest",
+    "python.testing.cwd": ""
 }

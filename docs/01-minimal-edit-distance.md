@@ -1,8 +1,10 @@
+
 # Minimal edit distance
 This sample calculates the minimum required distance to go from one string to another.  This algorithm is often known and refered to as the Levenshtein distance algorithm.
 
 Every required operation adds to the cost of that distance.  
 The following operations are available:
+
 - Remove character
 - Add character
 - Replace character

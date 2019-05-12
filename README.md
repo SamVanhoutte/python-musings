@@ -8,3 +8,4 @@ Learnings and samples for programming concepts, in Python
     a: measure of central tendency and dispersion.  
     b: probability distribution
 1. Big-O notation for algorithms: [documentation](./docs/03-big-o-notation.md)
+1. Graph algorithms (depth-first, breadth-first and dijkstra): [documentation](./docs/04-graph-algorithms.md)

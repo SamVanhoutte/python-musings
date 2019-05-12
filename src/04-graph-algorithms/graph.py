@@ -12,13 +12,14 @@ class Vertex:
 		self.state = VertexState.Open
 
 	def print(self):
-			print('Vertex', self.name, ':', self.state)
+		print('Vertex', self.name, ':', self.state)
 
 class Graph:
-	# def __init__(self, n):
-	vertices = {}
-	edges = []
-	edge_indices = {}
+	def __init__(self):
+		# def __init__(self, n):
+		self.vertices = {}
+		self.edges = []
+		self.edge_indices = {}
 	
 	def add_vertex(self, vertex):
 		if isinstance(vertex, Vertex) and vertex.name not in self.vertices:

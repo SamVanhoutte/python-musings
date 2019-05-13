@@ -17,7 +17,7 @@ def main():
     is_humans_turn = (input('Player to start first? [y/n]: ').upper()=='Y')
 
     # Main loop of this game
-    while not(board.board_full()) and not(board.someone_won()) :
+    while not(board.board_full()) and not(board.someone_won(not(is_humans_turn))):  #reversing the is_humans_turn, because we want to check the previous turn
         if is_humans_turn:
             player_turn(board)
         else:
@@ -25,4 +25,11 @@ def main():
         is_humans_turn = not(is_humans_turn)
         board.render()
 
+    if(board.someone_won(True)):
+        print("The player won !!! Congratulations")
+    if(board.someone_won(False)):
+        print("The computer won !!! He's too strong")
+    if(board.board_full()):
+        print("It's a draw !")
+        
 if __name__ == "__main__": main()

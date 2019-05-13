@@ -127,6 +127,7 @@ def minimax(state, depth, player):
 
     for cell in empty_cells(state):
         x, y = cell[0], cell[1]
+        print('Trying cell(',x,',',y,') for player', player)
         state[x][y] = player
         score = minimax(state, depth - 1, -player)
         state[x][y] = 0
@@ -146,12 +147,12 @@ def clean():
     """
     Clears the console
     """
-    os_name = platform.system().lower()
-    if 'windows' in os_name:
-        system('cls')
-    else:
-        system('clear')
-
+    # os_name = platform.system().lower()
+    # if 'windows' in os_name:
+    #     system('cls')
+    # else:
+    #     system('clear')
+    return
 
 def render(state, c_choice, h_choice):
     """

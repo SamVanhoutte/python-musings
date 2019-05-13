@@ -6,6 +6,8 @@
 import unittest                     # unit testing ftw
 import board as brd
 import numpy as np
+import play
+
 class TestMethods(unittest.TestCase):
     def test_horizontal_win(self):
         game_play = brd.Board(4)
@@ -15,7 +17,7 @@ class TestMethods(unittest.TestCase):
                 [0,0,0,0],
                 [0,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(True))
+        self.assertEqual(True, game_play.someone_won(False))
 
     def test_diagonal_down_win(self):
         game_play = brd.Board(4)
@@ -25,7 +27,7 @@ class TestMethods(unittest.TestCase):
                 [0,0,1,0],
                 [0,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(True))
+        self.assertEqual(True, game_play.someone_won(False))
 
     def test_diagonal_up_win(self):
         game_play = brd.Board(4)
@@ -35,7 +37,7 @@ class TestMethods(unittest.TestCase):
                 [0,1,0,0],
                 [1,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(True))
+        self.assertEqual(True, game_play.someone_won(False))
 
     def test_vertical_win(self):
         game_play = brd.Board(4)
@@ -45,21 +47,80 @@ class TestMethods(unittest.TestCase):
                 [0,0,1,0],
                 [0,0,1,0],
             ])
-        self.assertEqual(True, game_play.someone_won(True))
+        self.assertEqual(True, game_play.someone_won(False))
+
+    def test_empty_cells(self):
+        game_play = brd.Board(2)
+        game_play.set_state([
+                [0,1],
+                [1,0]
+            ])
+        self.assertEquals([[0,0],[1,1]], game_play.get_empty_cells())
+
+    def test_game_over_score(self):
+        game_play = brd.Board(4)
+        game_play.set_state([
+                [0,0,0,0],
+                [0,0,1,0],
+                [0,1,0,0],
+                [1,0,0,0],
+            ])
+        game_over, score = game_play.game_over()
+        self.assertEqual(True, game_over)
+        self.assertEqual(1, score)
 
     def test_diagonals(self):
-            game_play = brd.Board(4)
-            game_state = [
-                [0,0,0,0],
-                [1,1,0,1],
-                [0,0,1,0],
-                [0,0,1,1],
-            ]
-            game_play.set_state(game_state)
-            self.assertEquals([0, 1, 1, 1], game_play.get_diagonal_range(0, 0, True))
-            self.assertEquals([0, 0, 0], game_play.get_diagonal_range(0, 1, True))
-            self.assertEquals([0, 0, 0, 0], game_play.get_diagonal_range(3, 0, False))
-            self.assertEquals([0, 1, 0], game_play.get_diagonal_range(2, 0, False))
+        game_play = brd.Board(4)
+        game_state = [
+            [0,0,0,0],
+            [1,1,0,1],
+            [0,0,1,0],
+            [0,0,1,1],
+        ]
+        game_play.set_state(game_state)
+        self.assertEquals([0, 1, 1, 1], game_play.get_diagonal_range(0, 0, True))
+        self.assertEquals([0, 0, 0], game_play.get_diagonal_range(0, 1, True))
+        self.assertEquals([0, 0, 0, 0], game_play.get_diagonal_range(3, 0, False))
+        self.assertEquals([0, 1, 0], game_play.get_diagonal_range(2, 0, False))
+
+    def test_minimax_defensive(self):
+        game_play = brd.Board(3)
+        game_state = [
+            [1,1,0],
+            [0,0,-1],
+            [0,-1,0],
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(0, suggested_move[0])
+        self.assertEqual(2, suggested_move[1])
+
+    def test_minimax_for_win(self):
+        game_play = brd.Board(3)
+        game_state = [
+            [1,0,0],
+            [1,0,-1],
+            [0,0,-1],
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(0, suggested_move[0])
+        self.assertEqual(2, suggested_move[1])
+
+    def test_minimax_for_win(self):
+        game_play = brd.Board(3)
+        game_state = [
+            [0,0,1],
+            [1,-1,-1],
+            [0,0,-1],
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(0, suggested_move[0])
+        self.assertEqual(0, suggested_move[1])
 
 def main():
     game_play = brd.Board(4)

@@ -1,14 +1,57 @@
 import board as brd
+from math import inf as infinity
+import random
 
-def player_turn(board):
+def player_turn(board: brd.Board):
     set_field = input('Enter the number of the field you want to play?[1:' + str(board.size**2) + ']')
     print('field id', set_field)
     if(set_field!=''):
         board.player_set(int(set_field))
 
-def computer_turn(board):
-    print('computer turn')
-    
+def minimax(board_state: brd.Board, depth: int, is_human_turn: bool):
+    if not(is_human_turn): #computers turn
+        best = [-1, -1, -infinity]
+    else:
+        best = [-1, -1, +infinity]
+
+    game_over, score = board_state.game_over()
+    if depth == 0 or game_over:
+        return [-1, -1, score]
+
+    # Loop all available cells
+    for cell in board_state.get_empty_cells():
+        # Try and set all combinations
+        x, y = cell[0], cell[1]
+        board_state.set_cell(x, y, is_human_turn)
+        score = minimax(board_state, depth - 1, not(is_human_turn))
+        # Undo the move
+        board_state.free_cell(x, y)
+        score[0], score[1] = x, y
+
+        if is_human_turn:
+            if score[2] < best[2]:
+                best = score  # max value
+        else:
+            if score[2] > best[2]:
+                best = score  # min value
+
+    return best
+
+def computer_turn(board: brd.Board):
+    depth = len(board.get_empty_cells())
+    game_over, score = board.game_over()
+    if depth == 0 or game_over:
+        return
+
+    if depth == board.size**2: # when a new board is started (first move), pick random
+        x = random.randint(0,board.size-1)
+        y = random.randint(0,board.size-1)
+    else:
+        move = minimax(board, depth, False)
+        x, y = move[0], move[1]
+
+    board.set_cell(x, y, False)
+        
 def main():
     board = brd.Board(3)
     board.render()
@@ -27,9 +70,9 @@ def main():
 
     if(board.someone_won(True)):
         print("The player won !!! Congratulations")
-    if(board.someone_won(False)):
+    elif(board.someone_won(False)):
         print("The computer won !!! He's too strong")
-    if(board.board_full()):
+    elif(board.board_full()):
         print("It's a draw !")
-        
+
 if __name__ == "__main__": main()

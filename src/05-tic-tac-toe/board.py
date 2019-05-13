@@ -2,11 +2,12 @@ import numpy as np
 
 class Board:
     computer_char = 'X'
-    computer_val = -1
+    computer_val = 1
     player_char = 'O'
-    player_val = 1
+    player_val = -1
+    board = [[]]
 
-    def __init__(self, size=3):
+    def __init__(self, size:int =3):
         self.board = np.zeros(shape=(size, size))
         self.size = size
 
@@ -33,9 +34,28 @@ class Board:
             print('\n' + hor_line)
 
     def board_full(self):
-        return False
+        return (len(self.get_empty_cells())==0)
 
-    def someone_won(self, is_players_turn):
+    def game_over(self):
+        if(self.board_full()):
+            return True, 0  # Draw, so returning 0 as score
+        if(self.someone_won(True)):
+            return True, self.player_val  # Player wins, so returning -1 as score
+        if(self.someone_won(False)):
+            return True, self.computer_val  # Computer wins, so returning 1 as score
+        return False, 0
+
+    def get_empty_cells(self):
+        cells = []
+        
+        for x, row in enumerate(self.board):
+            for y, cell in enumerate(row):
+                if cell == 0:
+                    cells.append([x, y])
+
+        return cells
+
+    def someone_won(self, is_players_turn: bool):
         # Select value, based on whose turn it is
         value = self.player_val if is_players_turn else self.computer_val
         # First check all rows for sequences of the current value
@@ -72,7 +92,7 @@ class Board:
             
         return False
 
-    def get_diagonal_range(self, row, col, down):
+    def get_diagonal_range(self, row: int, col: int, down: bool):
         selected_range = []
         # print('get diagonal', row, col, down)
         if(down): # take diagonals
@@ -86,7 +106,6 @@ class Board:
         return selected_range
 
     def check_range_for_sequence(self, check_range, value, length=3):
-        check_array = [value] * length
         # print('Checking existence of the following sequence', check_array)
         for i in range(len(check_range)-(length-1)):
             # todo : should update this, to consider the length variable
@@ -95,13 +114,19 @@ class Board:
 
         return False
 
-    def set_field(self, field_number, value):
+    def set_field_by_index(self, field_number, value):
         row = (field_number - 1) // self.size
         col = (field_number - 1) % self.size
         self.board[row][col] = value
 
+    def set_cell(self, row: int, col: int, is_human: bool):
+        self.board[row][col] = self.player_val if is_human else self.computer_val
+
+    def free_cell(self, row: int, col: int):
+        self.board[row][col] = 0
+
     def player_set(self, field_number):
-        self.set_field(field_number, self.player_val)
+        self.set_field_by_index(field_number, self.player_val)
 
     def computer_set(self, field_number):
-        self.set_field(field_number, self.computer_val)
+        self.set_field_by_index(field_number, self.computer_val)

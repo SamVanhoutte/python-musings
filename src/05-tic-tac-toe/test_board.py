@@ -17,7 +17,7 @@ class TestMethods(unittest.TestCase):
                 [0,0,0,0],
                 [0,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(False))
+        self.assertEqual(True, game_play.someone_won(True))
 
     def test_diagonal_down_win(self):
         game_play = brd.Board(4)
@@ -27,7 +27,7 @@ class TestMethods(unittest.TestCase):
                 [0,0,1,0],
                 [0,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(False))
+        self.assertEqual(True, game_play.someone_won(True))
 
     def test_diagonal_up_win(self):
         game_play = brd.Board(4)
@@ -37,7 +37,7 @@ class TestMethods(unittest.TestCase):
                 [0,1,0,0],
                 [1,0,0,0],
             ])
-        self.assertEqual(True, game_play.someone_won(False))
+        self.assertEqual(True, game_play.someone_won(True))
 
     def test_vertical_win(self):
         game_play = brd.Board(4)
@@ -47,7 +47,7 @@ class TestMethods(unittest.TestCase):
                 [0,0,1,0],
                 [0,0,1,0],
             ])
-        self.assertEqual(True, game_play.someone_won(False))
+        self.assertEqual(True, game_play.someone_won(True))
 
     def test_empty_cells(self):
         game_play = brd.Board(2)
@@ -57,7 +57,7 @@ class TestMethods(unittest.TestCase):
             ])
         self.assertEquals([[0,0],[1,1]], game_play.get_empty_cells())
 
-    def test_game_over_score(self):
+    def test_game_finished_score(self):
         game_play = brd.Board(4)
         game_play.set_state([
                 [0,0,0,0],
@@ -65,9 +65,9 @@ class TestMethods(unittest.TestCase):
                 [0,1,0,0],
                 [1,0,0,0],
             ])
-        game_over, score = game_play.game_over()
+        game_over, score = game_play.check_game_finished(True)
         self.assertEqual(True, game_over)
-        self.assertEqual(1, score)
+        self.assertEqual(3, score)
 
     def test_diagonals(self):
         game_play = brd.Board(4)
@@ -86,7 +86,7 @@ class TestMethods(unittest.TestCase):
     def test_minimax_defensive(self):
         game_play = brd.Board(3)
         game_state = [
-            [1,1,0],
+            [1,1, 0],
             [0,0,-1],
             [0,-1,0],
         ]
@@ -99,9 +99,9 @@ class TestMethods(unittest.TestCase):
     def test_minimax_for_win(self):
         game_play = brd.Board(3)
         game_state = [
-            [1,0,0],
-            [1,0,-1],
-            [0,0,-1],
+            [-1,0, 0],
+            [-1,0, 1],
+            [ 0,0, 1],
         ]
         game_play.set_state(game_state)
         
@@ -109,7 +109,7 @@ class TestMethods(unittest.TestCase):
         self.assertEqual(0, suggested_move[0])
         self.assertEqual(2, suggested_move[1])
 
-    def test_minimax_for_win(self):
+    def test_minimax_for_diag_win(self):
         game_play = brd.Board(3)
         game_state = [
             [0,0,1],
@@ -121,6 +121,73 @@ class TestMethods(unittest.TestCase):
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
         self.assertEqual(0, suggested_move[0])
         self.assertEqual(0, suggested_move[1])
+    
+    def test_minimax_for_win4(self):
+        game_play = brd.Board(4)
+        game_state = [
+            [-1 ,1 ,0,-1],
+            [ 0, 1 ,0 ,0],
+            [ 0,-1 ,0, 1],
+            [ 1, 0 ,0,-1]
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEquals([1,2,3], suggested_move)
+        self.assertEqual(1, suggested_move[0])
+        self.assertEqual(2, suggested_move[1])
+
+    def test_minimax_end_case01(self):
+        game_play = brd.Board(3)
+        # one case that was incorrect
+        game_play.set_state([
+            [-1 , 1 ,-1],
+            [ 0 , 1 , 0],
+            [ 1 ,-1 ,-1]
+        ])
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(1, suggested_move[0])
+        self.assertEqual(2, suggested_move[1])
+
+    def test_minimax_end_case02(self):
+        game_play = brd.Board(3)
+
+        # second case that was incorrect
+        game_play.set_state([
+            [ 1 , 1 ,-1],
+            [-1 ,-1 , 1],
+            [ 0 , 0 , 1]
+        ])
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(2, suggested_move[0])
+        self.assertEqual(0, suggested_move[1])
+
+    def test_minimax_end_case03(self):
+        game_play = brd.Board(3)
+
+        # third case that was incorrect
+        game_play.set_state([
+            [ 1 , 0 ,-1],
+            [-1 , 1 , 1],
+            [-1 , 0 ,-1]
+        ])
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(2, suggested_move[0])
+        self.assertEqual(1, suggested_move[1])
+
+    def test_minimax_chose_win_over_defend(self):
+        game_play = brd.Board(3)
+
+        # third case that was incorrect
+        game_play.set_state([
+            [ 1 , 0 , 1],
+            [-1 , 0 , 1],
+            [ 0 ,-1 ,-1]
+        ])
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(2, suggested_move[0])
+        self.assertEqual(0, suggested_move[1])
+        
 
 def main():
     game_play = brd.Board(4)

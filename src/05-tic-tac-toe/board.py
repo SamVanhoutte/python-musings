@@ -2,9 +2,9 @@ import numpy as np
 
 class Board:
     computer_char = 'X'
-    computer_val = 1
+    #computer_val = -1
     player_char = 'O'
-    player_val = -1
+    #player_val = 1
     board = [[]]
 
     def __init__(self, size:int =3):
@@ -36,13 +36,13 @@ class Board:
     def board_full(self):
         return (len(self.get_empty_cells())==0)
 
-    def game_over(self):
+    def check_game_finished(self, is_human_turn: bool):
         if(self.board_full()):
             return True, 0  # Draw, so returning 0 as score
         if(self.someone_won(True)):
-            return True, self.player_val  # Player wins, so returning -1 as score
+            return True, 3 if is_human_turn else -3 #self.player_val  # Player wins
         if(self.someone_won(False)):
-            return True, self.computer_val  # Computer wins, so returning 1 as score
+            return True, -3 if is_human_turn else 3  # Computer wins
         return False, 0
 
     def get_empty_cells(self):

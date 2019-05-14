@@ -14,7 +14,7 @@ def minimax(board_state: brd.Board, depth: int, is_human_turn: bool):
     else:
         best = [-1, -1, +infinity]
 
-    game_over, score = board_state.game_over()
+    game_over, score = board_state.check_game_finished(is_human_turn)
     if depth == 0 or game_over:
         return [-1, -1, score]
 
@@ -28,18 +28,20 @@ def minimax(board_state: brd.Board, depth: int, is_human_turn: bool):
         board_state.free_cell(x, y)
         score[0], score[1] = x, y
 
-        if is_human_turn:
-            if score[2] < best[2]:
+        if not(is_human_turn):
+            # pick the max score/move when computers turn
+            if score[2] > best[2]:
                 best = score  # max value
         else:
-            if score[2] > best[2]:
+            # pick the lowest score/move when players turn
+            if score[2] < best[2]:
                 best = score  # min value
-
+    #print('minimax - depth', depth, 'is-human:', is_human_turn, 'result:', best[0], best[1])
     return best
 
 def computer_turn(board: brd.Board):
     depth = len(board.get_empty_cells())
-    game_over, score = board.game_over()
+    game_over, score = board.check_game_finished(False)
     if depth == 0 or game_over:
         return
 
@@ -50,10 +52,16 @@ def computer_turn(board: brd.Board):
         move = minimax(board, depth, False)
         x, y = move[0], move[1]
 
+    print('Computer decided for following move:', x, '-', y)
     board.set_cell(x, y, False)
         
 def main():
     board = brd.Board(3)
+    # board.set_state([
+    #     [1 ,1 ,-1],
+    #     [-1 ,1 ,1],
+    #     [0 ,0 ,1]
+    # ])
     board.render()
 
     # check who should start

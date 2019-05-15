@@ -8,34 +8,43 @@ def player_turn(board: brd.Board):
     if(set_field!=''):
         board.player_set(int(set_field))
 
-def minimax(board_state: brd.Board, depth: int, is_human_turn: bool):
+def minimax(board_state: brd.Board, depth: int, is_human_turn: bool, loop_count = 0):
     if not(is_human_turn): #computers turn
-        best = [-1, -1, -infinity]
+        best = [-1, -1, -infinity, loop_count]
     else:
-        best = [-1, -1, +infinity]
+        best = [-1, -1, +infinity, loop_count]
 
+    # we have arrived at a simulated state where the game is done, or the last available cell was reached
+    # now returning the score of this final move
     game_over, score = board_state.check_game_finished(is_human_turn)
     if depth == 0 or game_over:
-        return [-1, -1, score]
+        return [-1, -1, score, loop_count]
 
-    # Loop all available cells
+    # Loop all available cells, if we are here
     for cell in board_state.get_empty_cells():
         # Try and set all combinations
         x, y = cell[0], cell[1]
+        # Simulate the next available move 
         board_state.set_cell(x, y, is_human_turn)
-        score = minimax(board_state, depth - 1, not(is_human_turn))
-        # Undo the move
+        # recurse the function with the board and the new state set
+        loop_count+=1
+        minimax_move = minimax(board_state, depth - 1, not(is_human_turn), loop_count)
+        loop_count = minimax_move[3]
+        # we get the score of this move and all possible combinations after that
+
+        # Undo the move, to reset the board to the actual state
         board_state.free_cell(x, y)
-        score[0], score[1] = x, y
+        # We will return a list with the row, col and score, so we're setting row & col here
+        minimax_move[0], minimax_move[1] = x, y
 
         if not(is_human_turn):
             # pick the max score/move when computers turn
-            if score[2] > best[2]:
-                best = score  # max value
+            if minimax_move[2] > best[2]:
+                best = minimax_move  # max value
         else:
             # pick the lowest score/move when players turn
-            if score[2] < best[2]:
-                best = score  # min value
+            if minimax_move[2] < best[2]:
+                best = minimax_move  # min value
     #print('minimax - depth', depth, 'is-human:', is_human_turn, 'result:', best[0], best[1])
     return best
 

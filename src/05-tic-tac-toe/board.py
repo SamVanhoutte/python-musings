@@ -4,33 +4,33 @@ class Board:
     computer_char = 'X'
     #computer_val = -1
     player_char = 'O'
+    empty_char = ' '
     #player_val = 1
     board = [[]]
 
     def __init__(self, size:int =3):
-        self.board = np.zeros(shape=(size, size))
+        self.board = np.full(shape=(size, size), fill_value=self.empty_char)
         self.size = size
 
     def set_state(self, board):
         self.board = board
 
     def clear(self):
-        self.board = np.zeros(shape=(self.size, self.size))
+        self.board = np.full(shape=(self.size, self.size), fill_value=self.empty_char)
 
     def render(self):
         print('Computer =', self.computer_char, '- Player =', self.player_char)
-        chars = {
-            self.computer_val: self.computer_char,
-            self.player_val: self.player_char,
-            0: ' '
-        }
+        # chars = {
+        #     self.computer_val: self.computer_char,
+        #     self.player_val: self.player_char,
+        #     0: ' '
+        # }
         hor_line = '---------------'
 
         print('\n' + hor_line)
         for row in self.board:
             for cell in row:
-                symbol = chars[cell]
-                print(f'| {symbol} |', end='')
+                print(f'| {cell} |', end='')
             print('\n' + hor_line)
 
     def board_full(self):
@@ -40,9 +40,9 @@ class Board:
         if(self.board_full()):
             return True, 0  # Draw, so returning 0 as score
         if(self.someone_won(True)):
-            return True, 3 if is_human_turn else -3 #self.player_val  # Player wins
+            return True, -2 #if is_human_turn else -3 #self.player_val  # Player wins
         if(self.someone_won(False)):
-            return True, -3 if is_human_turn else 3  # Computer wins
+            return True, 3 #if is_human_turn else 3  # Computer wins
         return False, 0
 
     def get_empty_cells(self):
@@ -50,14 +50,14 @@ class Board:
         
         for x, row in enumerate(self.board):
             for y, cell in enumerate(row):
-                if cell == 0:
+                if cell == self.empty_char:
                     cells.append([x, y])
 
         return cells
 
     def someone_won(self, is_players_turn: bool):
         # Select value, based on whose turn it is
-        value = self.player_val if is_players_turn else self.computer_val
+        value = self.player_char if is_players_turn else self.computer_char
         # First check all rows for sequences of the current value
         for state_row in self.board:
             #at least three occurances in this range, so check further
@@ -120,13 +120,13 @@ class Board:
         self.board[row][col] = value
 
     def set_cell(self, row: int, col: int, is_human: bool):
-        self.board[row][col] = self.player_val if is_human else self.computer_val
+        self.board[row][col] = self.player_char if is_human else self.computer_char
 
     def free_cell(self, row: int, col: int):
-        self.board[row][col] = 0
+        self.board[row][col] = self.empty_char
 
     def player_set(self, field_number):
-        self.set_field_by_index(field_number, self.player_val)
+        self.set_field_by_index(field_number, self.player_char)
 
     def computer_set(self, field_number):
-        self.set_field_by_index(field_number, self.computer_val)
+        self.set_field_by_index(field_number, self.computer_char)

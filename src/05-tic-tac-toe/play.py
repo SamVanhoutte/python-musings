@@ -84,6 +84,7 @@ def negamax(board_state: brd.Board, depth: int, is_human_turn: bool):
         #     # pick the lowest score/move when players turn
         #     if minimax_move[2] < best[2]:
         #         best = minimax_move  # min value
+    # print ('Nega max depth', depth, ' - ishuman: ', is_human_turn , '- score: ', best)
     return best
 
 
@@ -136,7 +137,7 @@ def __computer_turn(board: brd.Board):
         x = random.randint(0,board.size-1)
         y = random.randint(0,board.size-1)
     else:
-        move = minimax(board, depth, False)
+        move = negamax(board, depth, False)
         x, y = move[0], move[1]
 
     print('Computer decided for following move:', x, '-', y)
@@ -155,7 +156,8 @@ def main():
     is_humans_turn = (input('Player to start first? [y/n]: ').upper()=='Y')
 
     # Main loop of this game
-    while not(board.board_full()) and not(board.someone_won(not(is_humans_turn))):  #reversing the is_humans_turn, because we want to check the previous turn
+
+    while not(board.board_full()) and not(board.check_game_finished(is_humans_turn)[0]):  #reversing the is_humans_turn, because we want to check the previous turn
         if is_humans_turn:
             __player_turn(board)
         else:

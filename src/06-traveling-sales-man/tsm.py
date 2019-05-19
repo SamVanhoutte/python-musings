@@ -21,11 +21,11 @@ city08 = city.City('08', -6, 3, 8)
 genes = [city01, city02, city03, city04, city05, city06, city07, city08]
 
 # Generating cities in one straight line
-# genes = []
-# route_length = 25
-# for i in range(0, route_length):
-#     genes.append(city.City(str(i), i, i))
-# print ('The shortest possible distance is ',  math.sqrt((route_length-1)**2 * 2) * 2)
+genes = []
+route_length = 25
+for i in range(0, route_length):
+    genes.append(city.City(str(i), i, i))
+print ('The shortest possible distance is ',  math.sqrt((route_length-1)**2 * 2) * 2)
 
 routes = []
 for i in range(0, pop_size):
@@ -33,11 +33,11 @@ for i in range(0, pop_size):
     
 population = gen.Population(routes, pop_size, pop_size // 3)
 
-distances = [population.get_fastest_route().get_distance()]
+distances = [population.get_fittest_indivual().get_distance()]
 for _ in range(0, generation_count):
     population.breed()
     # add shortest distance in route
-    fastest = population.get_fastest_route()
+    fastest = population.get_fittest_indivual()
     distances.append(fastest.get_distance())
     fastest.render()
 

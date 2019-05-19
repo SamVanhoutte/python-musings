@@ -29,31 +29,31 @@ class Population:
     __size = 6
     __elite_size = 3
 
-    def __init__(self, sequence, population_size: int = 6, elite_size: int = 3):
+    def __init__(self, individuals, population_size: int = 6, elite_size: int = 3):
         # We will initialize the population with the defined population size and we'll create random individuals
-        self.__individuals = sequence
+        self.__individuals = individuals
         self.__size = population_size
         self.__elite_size = elite_size
 
         return
 
-    def get_fastest_route(self):
-        return self.__rank_routes()[0]
+    def get_fittest_indivual(self):
+        return self.__rank_individuals()[0]
 
-    def __rank_routes(self):
-        sorted_routes = []
+    def __rank_individuals(self):
+        sorted_individuals = []
         fitnessResults = {}
         for i in range(0,len(self.__individuals)):
             fitnessResults[i] = self.__individuals[i].calculate_fitness()
         fitnessResults = sorted(fitnessResults.items(), key = operator.itemgetter(1), reverse = True)
         for ind_tuple in fitnessResults:
             # tuple values of the index and the fitness, taking the index now
-            sorted_routes.append(self.__individuals[ind_tuple[0]])
-        return sorted_routes
+            sorted_individuals.append(self.__individuals[ind_tuple[0]])
+        return sorted_individuals
 
     def create_mating_pool(self):
-        ranked_routes = self.__rank_routes()
-        return [r for r in ranked_routes[:self.__elite_size]]
+        ranked_individuals = self.__rank_individuals()
+        return [r for r in ranked_individuals[:self.__elite_size]]
 
     def breed(self):
         new_generation = self.create_mating_pool()

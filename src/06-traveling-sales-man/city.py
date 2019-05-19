@@ -1,8 +1,6 @@
-class Gene:
-    def __init__(self):
-        return
+import genetics as gen
 
-class City(Gene):
+class City(gen.Gene):
     Name = ''
     Lat = 0.0
     Lon = 0.0

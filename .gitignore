@@ -107,6 +107,7 @@ venv.bak/
 # vs code
 .vscode/
 .vscode/settings.json
+src/analytics/
 src/analytics/01 measures of central tendency and dispersion/Opdracht_01_Centrum_Spreidingsmaten_SamVanhoutte.zip
 src/analytics/01 measures of central tendency and dispersion/Opdracht_01_Centrum_Spreidingsmaten.xlsx
 src/analytics/01 measures of central tendency and dispersion/Opdracht_01_Centrum_Spreidingsmaten_SamVanhoutte.xlsx

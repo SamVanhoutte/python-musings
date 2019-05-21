@@ -126,7 +126,7 @@ def minimax(board_state: brd.Board, depth: int, is_human_turn: bool, loop_count 
             if minimax_move[2] < best[2]:
                 best = minimax_move  # min value
     return best
-
+    
 def __computer_turn(board: brd.Board):
     depth = len(board.get_empty_cells())
     game_over, score = board.check_game_finished(False)

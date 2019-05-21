@@ -116,7 +116,6 @@ class TestMethods(unittest.TestCase):
             [' ',' ','O']
         ]
         game_play.set_state(game_state)
-        
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
         self.assertEqual(0, suggested_move[0])
         self.assertEqual(2, suggested_move[1])

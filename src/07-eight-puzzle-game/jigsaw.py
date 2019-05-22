@@ -8,7 +8,7 @@ class JigsawPlay:
 
     def solve(self):
         puzzle = self.__board
-        open_moves = PriorityQ() #set([puzzle])
+        open_moves = PriorityQ() 
         closed_moves = set()
         taken_steps = {}
 
@@ -24,7 +24,6 @@ class JigsawPlay:
             if(parent_move.completed()):
                 print('Final state found !')
                 return self.trace_back(taken_steps, parent_move.depth, puzzle.get_signature())
-                return taken_steps
 
             open_moves.complete(locktoken)
             closed_moves.add(parent_move)
@@ -57,14 +56,8 @@ class JigsawPlay:
             trace.append(current_phase)
             current_phase = taken_steps[current_phase][1]
         trace.append(initial_state)
-        return reversed(trace)
-        # current_phase = initial_state  # the actual solution
-        # while (not(current_phase.startswith('1234 5678'))): #startswith to ignore depth
-        #     #print('Tracing back', current_phase)
-        #     trace.append(current_phase)
-        #     current_phase = taken_steps[current_phase][1]
-        # trace.append('1234 5678')
-        return trace
+        return list(reversed(trace))
+
 def main():
     puzz = Puzzle()
     puzz.set_state([[1, 2, 3],
@@ -79,6 +72,5 @@ def main():
     #print(steps)
     for key in steps:
         print(Puzzle(key))
-    #     print('Move: ', key, ' - Previous move: ', steps[key][1])
 
 if __name__ == "__main__": main()

@@ -60,7 +60,7 @@ class TestMethods(unittest.TestCase):
         puzz.set_state([[1, 2, 3],
                         [4, 7, 5],
                         [6, 8, 0]])
-        self.assertEqual('12347568 ', puzz.get_signature())
+        self.assertEqual('12347568 :0', puzz.get_signature())
         
     def test_solve_easy(self):
         puzz = Puzzle()
@@ -69,7 +69,7 @@ class TestMethods(unittest.TestCase):
                         [6, 8, 0]])
         jigsaw = JigsawPlay(puzz)
         steps = jigsaw.solve()
-        self.assertEqual(len(steps), 2)
+        self.assertEqual(len(steps), 3)
 
     def test_manhattan_distance(self):
         puzz = Puzzle()

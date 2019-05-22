@@ -60,7 +60,7 @@ class TestMethods(unittest.TestCase):
         puzz.set_state([[1, 2, 3],
                         [4, 7, 5],
                         [6, 8, 0]])
-        self.assertEqual('1-2-3-4-7-5-6-8-0-', puzz.get_signature())
+        self.assertEqual('12347568 ', puzz.get_signature())
         
     def test_solve_easy(self):
         puzz = Puzzle()
@@ -77,3 +77,7 @@ class TestMethods(unittest.TestCase):
                         [4, 7, 5],
                         [6, 8, 0]])
         self.assertEqual(4, puzz.evaluate_manhattan())
+    
+    def test_signature_constructor(self):
+        puzz = Puzzle('1234 5678')
+        self.assertEqual(True, puzz.completed())

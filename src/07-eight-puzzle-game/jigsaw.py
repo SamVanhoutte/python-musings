@@ -8,75 +8,77 @@ class JigsawPlay:
 
     def solve(self):
         puzzle = self.__board
-        open_moves = set([puzzle])
+        open_moves = PriorityQ() #set([puzzle])
         closed_moves = set()
         taken_steps = {}
 
-        # This will be the goal distance (g-score)
-        moves_score = {puzzle.get_signature() : 0}
-        # This will be the total cost function, which is the moves + heuristic evaluation (g+h)
-        # no move cost, so only heuristic to start with the board
-        cost_scores = {puzzle.get_signature() : puzzle.evaluate_manhattan()}  
+        # Adding current state of the puzzle with highest priority to the queue
+        open_moves.put(puzzle.evaluate_manhattan(), puzzle)
 
         # As long as there are options to explore, we keep working.  
         # If we're out, the puzzle cannot be solved
-        while (len(open_moves) != 0): 
+        while (open_moves.get_depth() > 0): 
             # current move to evaluate
-            current_move : Puzzle = None
+            locktoken, (cost, parent_move) = open_moves.peek()
 
-            for move in open_moves:
-                if(current_move is None or cost_scores[move.get_signature()] < cost_scores[current_move.get_signature()]):
-                    current_move = move
-
-            if(current_move.completed()):
+            if(parent_move.completed()):
                 print('Final state found !')
-                print('g:',moves_score)
-                print('f:',cost_scores)
+                return self.trace_back(taken_steps, parent_move.depth, puzzle.get_signature())
                 return taken_steps
-            
-            open_moves.remove(current_move)
-            closed_moves.add(current_move)
 
-            for move in current_move.get_available_moves():
-                #print('Checking move', move)
-                moved_state : Puzzle = current_move.clone()
-                moved_state.move_cell(move[0], move[1])
-                moved_state.depth += 1 # increase cost
+            open_moves.complete(locktoken)
+            closed_moves.add(parent_move)
+
+            for move in parent_move.get_available_moves():
+                # Cloning the previous state and applying the available move
+                current_move : Puzzle = parent_move.clone()
+                current_move.move_cell(move[0], move[1])
+                current_move.depth += 1 # increase cost
                 
-                if (moved_state in closed_moves):
+                # Ignore the actual state, if we've visited that already
+                if (current_move in closed_moves):
                     continue
                 
-                tentative_moves_score = 1
-                if(current_move.get_signature() in moves_score):
-                    tentative_moves_score = moves_score[current_move.get_signature()] + 1
-
-                moved_signature = moved_state.get_signature()
-                if(moved_state not in open_moves or tentative_moves_score < moves_score[moved_signature]):
-                    #print('score (tent / score)', tentative_moves_score, moves_score[moved_state])
-                    print('adding the move to the history')
-                    taken_steps[move] = (current_move, 'direction')
-                    #print(moved_state)
-                    moves_score[moved_signature] = tentative_moves_score
-                    cost_scores[moved_signature] = moves_score[moved_signature] + moved_state.evaluate_manhattan()
-                    if(moved_state not in open_moves):
-                        open_moves.add(moved_state)
+                current_cost = current_move.depth + current_move.evaluate_manhattan()
+                current_signature = current_move.get_signature()
+                if(current_signature in taken_steps.keys()):
+                    print('already existing !!' , current_signature)
+                else:
+                    taken_steps[current_signature] = (move, parent_move.get_signature())
+                open_moves.put(current_cost, current_move)
 
         return None
 
-
-
+    def trace_back(self, taken_steps, depth, initial_state: str):
+        trace = list()
+        current_phase = '1234 5678:' + str(depth)  # the actual solution
+        while (not(current_phase.startswith(initial_state))): #startswith to ignore depth
+            #print('Tracing back', current_phase)
+            trace.append(current_phase)
+            current_phase = taken_steps[current_phase][1]
+        trace.append(initial_state)
+        return reversed(trace)
+        # current_phase = initial_state  # the actual solution
+        # while (not(current_phase.startswith('1234 5678'))): #startswith to ignore depth
+        #     #print('Tracing back', current_phase)
+        #     trace.append(current_phase)
+        #     current_phase = taken_steps[current_phase][1]
+        # trace.append('1234 5678')
+        return trace
 def main():
     puzz = Puzzle()
     puzz.set_state([[1, 2, 3],
                     [4, 7, 5],
                     [6, 8, 0]])
-    # puzz.set_state([[1, 2, 3],
-    #                 [7, 5, 8],
-    #                 [4, 6, 0]])
+    puzz.set_state([[1, 2, 3],
+                    [7, 5, 8],
+                    [4, 6, 0]])
     print(puzz)
     jigsaw = JigsawPlay(puzz)
     steps = jigsaw.solve()
-    for step in steps:
-        print(step)
+    #print(steps)
+    for key in steps:
+        print(Puzzle(key))
+    #     print('Move: ', key, ' - Previous move: ', steps[key][1])
 
 if __name__ == "__main__": main()

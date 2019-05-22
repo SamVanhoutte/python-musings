@@ -27,7 +27,6 @@ class PriorityQ:
                 self.__internalqueue.pop(messagetoken)
                 return messagetoken, value
         return None
-    
 
     def get_depth(self):
         return len(self.__internalqueue)

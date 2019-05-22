@@ -6,23 +6,27 @@ class Puzzle:
     depth = 0
     __goal = [[1, 2, 3],[4, 0, 5], [6, 7, 8]]
 
-    def __init__(self):
+    def __init__(self, signature:str = None):
+        self.board = np.zeros((3, 3), int)
         shuffled_range = [i for i in range(9)]
         shuffle(shuffled_range)
         seq = 0
-        self.board = np.zeros((3, 3), int)
         for row in range(0, 3):
             for col in range(0, 3):
-                self.board[row][col] = shuffled_range[seq]
+                value_to_set = shuffled_range[seq]
+                if(signature != None):
+                    # don't use the shuffle, but take the char from the string
+                    c = signature[seq]
+                    value_to_set = 0 if c == ' ' else int(c)
+                self.board[row][col] = value_to_set
                 seq += 1
 
     def set_state(self, board):
         self.board = board
     
     def __str__(self): 
-        result = ''
         hor_line = '---------------\n'
-        result = '\n' + hor_line
+        result = ''
         for row in self.board:
             for cell in row:
                 if (cell!=0):
@@ -30,9 +34,11 @@ class Puzzle:
                 else:
                     result += '|   |'
 
-            result += '\n' + hor_line
+            result += '\n'
         return result
     
+            
+
     def get_open_cell(self):
         for row in range(0, 3):
             for col in range(0, 3):
@@ -44,8 +50,8 @@ class Puzzle:
         result = ''
         for row in self.board:
             for cell in row:
-                result += str(cell) + '-'
-        return result
+                result += str(cell) if cell != 0 else ' '
+        return result + ':' + str(self.depth)
 
     def get_available_moves(self):
         open_row, open_col = self.get_open_cell()

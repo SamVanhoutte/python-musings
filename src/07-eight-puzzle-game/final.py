@@ -198,6 +198,29 @@ class EightPuzzle():
 #         return current_node
 
 def main():
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        #raise InputError("Not enough arguments")
+        heuristic = EightPuzzle.manhatten_distance
+    h = int(sys.argv[1])
+    if h == 1:
+        heuristic = EightPuzzle.manhatten_distance
+    elif h == 2:
+        heuristic = EightPuzzle.tile_switches_remaining
+    else:
+        raise InputError("Heuristic argument must be 1 or 2")
+    if len(sys.argv) == 3:
+        o = int(sys.argv[2])
+        if o == 0:
+            output = EightPuzzle.action_sequence
+        elif o == 1:
+            output = EightPuzzle.state_transition
+        else:
+            raise InputError("Output argument must be 0 or 1")
+    else:
+        output = EightPuzzle.action_sequence
+    
+    input_i = sys.stdin.readline()
+    input_f = sys.stdin.readline()
     
     initial = EightPuzzle(input_i)
     goal = EightPuzzle(input_f)

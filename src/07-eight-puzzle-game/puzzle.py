@@ -1,9 +1,10 @@
 from random import shuffle
 import numpy as np
 
-class puzzle:
+class Puzzle:
     board = [[]]
     depth = 0
+    __goal = [[1, 2, 3],[4, 0, 5], [6, 7, 8]]
 
     def __init__(self):
         shuffled_range = [i for i in range(9)]
@@ -20,7 +21,7 @@ class puzzle:
     
     def __str__(self): 
         result = ''
-        hor_line = '---------------'
+        hor_line = '---------------\n'
         result = '\n' + hor_line
         for row in self.board:
             for cell in row:
@@ -62,7 +63,7 @@ class puzzle:
         return available_moves
 
     def completed(self):
-        return (np.array(self.board) == np.array([[1, 2, 3],[4, 0, 5], [6, 7, 8]])).all()
+        return (np.array(self.board) == np.array(self.__goal)).all()
 
     def move_cell(self,row:int, col:int):
         # check if move is valid
@@ -71,16 +72,18 @@ class puzzle:
         self.board[row][col] = 0
 
     def clone(self):
-        cloned_puzzle = puzzle()
+        cloned_puzzle = Puzzle()
         cloned_puzzle.set_state(np.copy(self.board))
         cloned_puzzle.depth = self.depth
         return cloned_puzzle
 
-def main():
-    puzz = puzzle()
-    # puzz.set_state([[1, 2, 3],
-    #                 [4, 7, 5],
-    #                 [6, 0, 8]])
-    print(puzz)
-
-if __name__ == "__main__": main()
+    def evaluate_manhattan(self):
+        sum = 0
+        for row in range(0, 3):
+            for col in range(0, 3):
+                tile = self.board[row][col]
+                for m in range(0, 3):
+                    for n in range(0, 3):
+                        if tile == self.__goal[m][n]:
+                            sum += abs(row-m) + abs(col-n)
+        return sum

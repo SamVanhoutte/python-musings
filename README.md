@@ -11,3 +11,4 @@ Learnings and samples for programming concepts, in Python
 1. Graph algorithms (depth-first, breadth-first and dijkstra): [documentation](./docs/04-graph-algorithms.md)
 1. Tic tac toe (applying mini-max and neg-max): [documentation](./docs/05-tictactoe.md)
 1. Traveling sales man (using genetic algorithms): [documentation](./docs/06-traveling-sales-man.md)
+1. Eight-puzzle game (implementing the A* algorithm): [documentation](./docs/07-eight-puzzle-game.md)

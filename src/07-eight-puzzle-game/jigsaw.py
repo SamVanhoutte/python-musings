@@ -1,13 +1,17 @@
 from puzzle import Puzzle 
 import random as rnd
 from priority_queue import PriorityQ
+from timeit import Timer
+import matplotlib.pyplot as plt
 
 class JigsawPlay:
-    def __init__(self, board:Puzzle):
-        self.__board = board
+    _board = None
 
-    def solve(self, evaluation_method = 'man'):
-        puzzle = self.__board
+    def __init__(self, board:Puzzle):
+        self._board = board
+
+    def solve(self, evaluation_method = 'good', return_steps: bool = True):
+        puzzle = self._board
         open_moves = PriorityQ() 
         closed_moves = set()
         taken_steps = {}
@@ -21,9 +25,15 @@ class JigsawPlay:
             # current move to evaluate
             locktoken, (cost, parent_move) = open_moves.peek()
 
+            if(parent_move.depth > 50):
+                print('Max depth of 50 reached, returning now')
+                return None
             if(parent_move.completed()):
-                print('Final state found !')
-                return self.trace_back(taken_steps, parent_move.depth, puzzle.get_signature())
+                # print('Final state found !')
+                if (return_steps):
+                    return self.trace_back(taken_steps, parent_move.depth, puzzle.get_signature())
+                else:
+                    return None
 
             open_moves.complete(locktoken)
             closed_moves.add(parent_move)
@@ -40,9 +50,7 @@ class JigsawPlay:
                 
                 current_cost = current_move.depth + current_move.evaluate(evaluation_method)
                 current_signature = current_move.get_signature()
-                if(current_signature in taken_steps.keys()):
-                    print('already existing !!' , current_signature)
-                else:
+                if(not(current_signature in taken_steps.keys())):
                     taken_steps[current_signature] = (move, parent_move.get_signature())
                 open_moves.put(current_cost, current_move)
 
@@ -54,23 +62,58 @@ class JigsawPlay:
         while (not(current_phase.startswith(initial_state))): #startswith to ignore depth
             #print('Tracing back', current_phase)
             trace.append(current_phase)
-            current_phase = taken_steps[current_phase][1]
+            if(current_phase in taken_steps):
+                current_phase = taken_steps[current_phase][1]
         trace.append(initial_state)
         return list(reversed(trace))
 
+def time_solve_puzzle(evaluation_method:str, puzzles, print_steps: bool):
+    print('Solving', len(puzzles), 'puzzles with the following evaluation method:', evaluation_method)
+    for puzz in puzzles:
+        jigsaw = JigsawPlay(puzz)
+        jigsaw.solve(evaluation_method, print_steps)
+
+def generate_puzzles(required_number:int):
+    print('generating', required_number, 'puzzles')
+    puzzles = []
+    for _ in range(required_number):
+        puzzles.append(Puzzle())
+    return puzzles
+
 def main():
-    puzz = Puzzle()
-    puzz.set_state([[1, 2, 3],
-                    [4, 7, 5],
-                    [6, 8, 0]])
-    puzz.set_state([[1, 2, 3],
-                    [7, 5, 8],
-                    [4, 6, 0]])
-    print(puzz)
-    jigsaw = JigsawPlay(puzz)
-    steps = jigsaw.solve()
-    #print(steps)
-    for key in steps:
-        print(Puzzle(key))
+    #First show one execution of a puzzle to solve
+    pz = Puzzle('12375846 ')
+    print('Solving the following puzzle and printing steps:')
+    print(pz)
+    jigsaw = JigsawPlay(pz)
+    steps = jigsaw.solve('fair', True)
+    for step in steps:
+        print(Puzzle(step))
+
+    #Now time everything and plot the graph
+    number_executions = 10
+    puzzles = generate_puzzles(number_executions)
+    fair_lambda = Timer(lambda: time_solve_puzzle('fair', puzzles, False))
+    fair_score = fair_lambda.timeit(number=1)
+    weak_lambda = Timer(lambda: time_solve_puzzle('weak', puzzles, False))
+    weak_score = weak_lambda.timeit(number=1)
+    bad_lambda = Timer(lambda: time_solve_puzzle('bad', puzzles, False))
+    bad_score = bad_lambda.timeit(number=1)
+    good_lambda = Timer(lambda: time_solve_puzzle('good', puzzles, False))
+    good_score = good_lambda.timeit(number=1)
+
+    print ('Fair evaluation execution time: ', fair_score)
+    print ('Weak evaluation execution time: ', weak_score)
+    print ('Bad evaluation execution time: ', bad_score)
+    print ('Good evaluation execution time: ', good_score)
+
+
+    plt.plot(['bad', 'weak', 'fair', 'good'], [bad_score, weak_score, fair_score, good_score])
+    plt.title('A* evaluation timing')
+    plt.ylabel('Duration')
+    plt.show()
+
+
 
 if __name__ == "__main__": main()
+

@@ -16,5 +16,6 @@
         "."
     ],
     "pythonTestExplorer.testFramework": "pytest",
-    "python.testing.cwd": ""
+    "python.testing.cwd": "",
+    "python.formatting.provider": "black"
 }

@@ -20,8 +20,8 @@ class TestMinimax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_minimax_for_win(self):
         game_play = Board(3)
@@ -32,8 +32,8 @@ class TestMinimax(unittest.TestCase):
         ]
         game_play.set_state(game_state)
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_minimax_for_diag_win(self):
         game_play = Board(3)
@@ -45,9 +45,23 @@ class TestMinimax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
     
+    def test_doc_sample(self):
+        # taken from https://github.com/Cledersonbc/tic-tac-toe-minimax
+        game_play = Board(3)
+        game_state = [
+            ['X','X','O'],
+            ['O',' ',' '],
+            [' ','X','O']
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
+
     def test_minimax_for_win4(self):
         game_play = Board(4)
         game_state = [
@@ -59,8 +73,8 @@ class TestMinimax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_minimax_end_case01(self):
         game_play = Board(3)
@@ -71,8 +85,8 @@ class TestMinimax(unittest.TestCase):
             ['O','X','X']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_minimax_end_case02(self):
         game_play = Board(3)
@@ -84,8 +98,8 @@ class TestMinimax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
 
     def test_minimax_end_case03(self):
         game_play = Board(3)
@@ -97,8 +111,8 @@ class TestMinimax(unittest.TestCase):
             ['X',' ','X']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(1, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
 
     def test_minimax_chose_win_over_defend02(self):
         game_play = Board(3)
@@ -110,8 +124,8 @@ class TestMinimax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
 
     def test_minimax_chose_win_over_defend03(self):
         game_play = Board(3)
@@ -123,8 +137,8 @@ class TestMinimax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(1, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
 
     def test_minimax_chose_win_over_defend01(self):
         game_play = Board(3)
@@ -136,8 +150,8 @@ class TestMinimax(unittest.TestCase):
             [' ','X','X']
         ])
         suggested_move = play.minimax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
 
 class TestNegamax(unittest.TestCase):
     def test_negamax_defensive(self):
@@ -150,8 +164,23 @@ class TestNegamax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
+
+    def test_doc_sample(self):
+        # taken from https://github.com/Cledersonbc/tic-tac-toe-minimax
+        game_play = Board(3)
+        game_state = [
+            ['X','X','O'],
+            ['O',' ',' '],
+            [' ','X','O']
+        ]
+        game_play.set_state(game_state)
+        
+        suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
+
 
     def test_negamax_for_win(self):
         game_play = Board(3)
@@ -163,8 +192,8 @@ class TestNegamax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_negamax_for_diag_win(self):
         game_play = Board(3)
@@ -176,8 +205,8 @@ class TestNegamax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(0, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(0, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
     
     def test_negamax_for_win4(self):
         game_play = Board(4)
@@ -190,8 +219,8 @@ class TestNegamax(unittest.TestCase):
         game_play.set_state(game_state)
         
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_negamax_end_case01(self):
         game_play = Board(3)
@@ -202,8 +231,8 @@ class TestNegamax(unittest.TestCase):
             ['O','X','X']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(2, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(2, suggested_move.column)
 
     def test_negamax_end_case02(self):
         game_play = Board(3)
@@ -215,8 +244,8 @@ class TestNegamax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
 
     def test_negamax_end_case03(self):
         game_play = Board(3)
@@ -228,8 +257,8 @@ class TestNegamax(unittest.TestCase):
             ['X',' ','X']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(1, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
 
     def test_negamax_chose_win_over_defend02(self):
         game_play = Board(3)
@@ -241,8 +270,8 @@ class TestNegamax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(1, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(1, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
 
     def test_negamax_chose_win_over_defend03(self):
         game_play = Board(3)
@@ -254,8 +283,8 @@ class TestNegamax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(1, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
 
     def test_negamax_chose_win_over_defend03(self):
         game_play = Board(3)
@@ -267,8 +296,8 @@ class TestNegamax(unittest.TestCase):
             [' ',' ','O']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(1, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(1, suggested_move.column)
 
     def test_negamax_chose_win_over_defend01(self):
         game_play = Board(3)
@@ -280,6 +309,6 @@ class TestNegamax(unittest.TestCase):
             [' ','X','X']
         ])
         suggested_move = play.negamax(game_play, len(game_play.get_empty_cells()), False)
-        self.assertEqual(2, suggested_move[0])
-        self.assertEqual(0, suggested_move[1])
+        self.assertEqual(2, suggested_move.row)
+        self.assertEqual(0, suggested_move.column)
                 

@@ -38,17 +38,12 @@ class Board:
 
     def check_game_finished(self, is_human_turn: bool):
         if(self.player_won()):
-            return True, -3 #if is_human_turn else -3 #self.player_val  # Player wins
+            return True, -4 #if is_human_turn else -3 #self.player_val  # Player wins
         if(self.computer_won()):
             return True, 3 #if is_human_turn else 3  # Computer wins
         if(self.board_full()):
             return True, 0  # Draw, so returning 0 as score
         return False, 0
-
-    def evaluate_move(self, col: int, row: int, is_human_turn: bool):
-        self.set_cell(row, col, is_human_turn)
-        finished, score = self.check_game_finished(is_human_turn)
-        return MoveEvaluation(col, row, score, finished)
 
     def get_empty_cells(self):
         cells = []
@@ -144,11 +139,11 @@ class Board:
 
 
 # Structure to return evaluation of a move
-class MoveEvaluation:
-    column = -1
-    row = -1
-    score = 0
-    game_over = False
+class MoveRecommendation:
+    column : int = -1
+    row : int = -1
+    score : int = 0
+    game_over : bool = False
 
     def __init__(self, column: int, row: int, score: int, game_over: bool = False):
         self.column = column

@@ -76,8 +76,30 @@ class TestMethods(unittest.TestCase):
         puzz.set_state([[1, 2, 3],
                         [4, 7, 5],
                         [6, 8, 0]])
-        self.assertEqual(4, puzz.evaluate_manhattan())
+        self.assertEqual(2, puzz.evaluate('fair'))
+        puzz = Puzzle(' 13425678')
+        self.assertEqual(2, puzz.evaluate('fair'))
+
     
+    def test_hamming_distance(self):
+        puzz = Puzzle()
+        puzz.set_state([[1, 2, 3],
+                        [4, 7, 5],
+                        [6, 8, 0]])
+        self.assertEqual(3, puzz.evaluate('weak'))
+
+    def test_opposities_complete(self):
+        puzz = Puzzle('1234 5678')
+        self.assertEqual(0, puzz.evaluate('bad'))
+
+    def test_opposities_incomplete(self):
+        puzz = Puzzle('1234756 8')
+        self.assertEqual(3, puzz.evaluate('bad'))
+
+    def test_nilsson_sequence(self):
+        puzz = Puzzle(' 13425678')
+        self.assertEqual(17, puzz.evaluate('good'))
+
     def test_signature_constructor(self):
         puzz = Puzzle('1234 5678')
         self.assertEqual(True, puzz.completed())

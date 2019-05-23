@@ -1,6 +1,6 @@
 from random import shuffle
 import numpy as np
-
+import math
 class Puzzle:
     board = [[]]
     depth = 0
@@ -83,13 +83,59 @@ class Puzzle:
         cloned_puzzle.depth = self.depth
         return cloned_puzzle
 
-    def evaluate_manhattan(self):
+    def evaluate(self, evaluation_method: str = 'fair'):
+        if(evaluation_method=='good'):
+            return self.__evaluate_nilsson_sequence()
+        elif(evaluation_method=='fair'):
+            return self.__evaluate_manhattan()
+        elif(evaluation_method=='weak'):
+            return self.__evaluate_hamming()
+        elif(evaluation_method=='bad'):
+            return self.__evaluate_opposites()
+
+    def __evaluate_manhattan(self):
         sum = 0
         for row in range(0, 3):
             for col in range(0, 3):
                 tile = self.board[row][col]
-                for m in range(0, 3):
-                    for n in range(0, 3):
-                        if tile == self.__goal[m][n]:
-                            sum += abs(row-m) + abs(col-n)
+                if(tile>0):
+                    for m in range(0, 3):
+                        for n in range(0, 3):
+                            if tile == self.__goal[m][n]:
+                                sum += abs(row-m) + abs(col-n)
         return sum
+
+    def __evaluate_nilsson_sequence(self):
+        # inspired by the answer here: https://cs.stackexchange.com/questions/1904/nilssons-sequence-score-for-8-puzzle-problem-in-a-algorithm?rq=1
+        # if the empty box is not in the middle, start with cost 1
+        total_score = 0 if self.board[1][1]==0 else 1 
+        # add manhattan distance cost
+        distance_cost = self.__evaluate_manhattan()
+        # successors
+        successor_cost = 0
+        goal_pairs = list([[1,2],[2,3],[3,5],[5,8],[8,7],[7,6],[6,4],[4,1]])
+        if([self.board[0][0],self.board[0][1]] not in goal_pairs): successor_cost+=1
+        if([self.board[0][1],self.board[0][2]] not in goal_pairs): successor_cost+=1
+        if([self.board[0][2],self.board[1][2]] not in goal_pairs): successor_cost+=1
+        if([self.board[1][2],self.board[2][2]] not in goal_pairs): successor_cost+=1
+        if([self.board[2][2],self.board[2][1]] not in goal_pairs): successor_cost+=1
+        if([self.board[2][1],self.board[2][0]] not in goal_pairs): successor_cost+=1
+        if([self.board[2][0],self.board[1][0]] not in goal_pairs): successor_cost+=1
+        return distance_cost + 3 * (total_score + 2*successor_cost)
+    
+    def __evaluate_hamming(self):
+        sum = 0
+        for row in range(0, 3):
+            for col in range(0, 3):
+                tile = self.board[row][col]
+                if(tile!=self.__goal[row][col]):
+                    sum += 1
+        return sum
+
+    def __evaluate_opposites(self):
+        sum = 0
+        sum += abs(self.board[0][0] - self.board[2][2])
+        sum += abs(self.board[0][1] - self.board[2][1])
+        sum += abs(self.board[0][2] - self.board[2][0])
+        sum += abs(self.board[1][0] - self.board[1][2])
+        return abs(16-sum)

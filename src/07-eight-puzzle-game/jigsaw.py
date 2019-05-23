@@ -6,14 +6,14 @@ class JigsawPlay:
     def __init__(self, board:Puzzle):
         self.__board = board
 
-    def solve(self):
+    def solve(self, evaluation_method = 'man'):
         puzzle = self.__board
         open_moves = PriorityQ() 
         closed_moves = set()
         taken_steps = {}
 
         # Adding current state of the puzzle with highest priority to the queue
-        open_moves.put(puzzle.evaluate_manhattan(), puzzle)
+        open_moves.put(puzzle.evaluate(evaluation_method), puzzle)
 
         # As long as there are options to explore, we keep working.  
         # If we're out, the puzzle cannot be solved
@@ -38,7 +38,7 @@ class JigsawPlay:
                 if (current_move in closed_moves):
                     continue
                 
-                current_cost = current_move.depth + current_move.evaluate_manhattan()
+                current_cost = current_move.depth + current_move.evaluate(evaluation_method)
                 current_signature = current_move.get_signature()
                 if(current_signature in taken_steps.keys()):
                     print('already existing !!' , current_signature)

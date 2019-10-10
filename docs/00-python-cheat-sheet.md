@@ -38,13 +38,43 @@ sns.pairplot(dataset)
 ```
 <img src="./imgs/cheat-pairplot.png" height="200" />
 
-## Data cleaning
+## Feature engineering
 
 ### Remove a column from a dataset
 ```python
 #inplace updates the dataframe 
 # axis=1 means column (axis=0 means row)
 dataset.drop('COLUMN_NAME', axis=1, inplace=True) 
+```
+
+### One-hot encoding
+When features contain categories (text based), they can be translated into seperate feature (a feature per category), where the feature value will be 0 or 1.  This can be automated, using the following code:
+
+```python
+dataset = pd.concat([dataset,pd.get_dummies(dataset['category_feature_name'], prefix='feat')],axis=1)
+dataset.drop(['category_feature_name'], axis=1, inplace=True)
+```
+### Add extra (high-norm) features
+By adding new features that are combination of each other (distance, surface, weekday), it's possible to implement feature expansion.  
+
+```python
+# Inserting the columns in the last but one column (to keep output value in last column)
+dataset2  = dataset.copy()
+dataset2.insert(dataset2.columns.size-1,'COL1^2',dataset.COL1**2)
+dataset2.insert(dataset2.columns.size-1,'COL1^3',dataset.COL1**3)
+dataset2.insert(dataset2.columns.size-1,'COL1*COL2',dataset.COL1*dataset.COL2)
+```
+
+This can also be automated, so that the package is adding a combination of the existing features for us.  Typically the power should be limited to 3-5, as this can exponentially explode the number of features.
+
+```python
+# Automagically add higher order features
+from sklearn.preprocessing import PolynomialFeatures
+power = 3
+poly = PolynomialFeatures(power)
+poly.fit(X_train)
+X_train_poly = poly.transform(X_train)
+X_test_poly = poly.transform(X_test)
 ```
 
 ### Remove outliers
@@ -65,9 +95,51 @@ X = dataset.drop(['OutputColumn'],axis=1)
 
 ### Split data in training and test set
 Using the standard function train_test_split:
-
+Important that the randomization will be used to shift data around (except with time series)
 ```python
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
+```
+### Normalize values
+Having all feature in the same scale, will make the performance of the Gradient Descent much faster
+
+- **StandardScalar**: The idea behind StandardScaler is that it will transform your data such that its distribution will have a mean value 0 and standard deviation of 1. Given the distribution of the data, each value in the dataset will have the sample mean value subtracted, and then divided by the standard deviation of the whole dataset. Values can be negative, positive and more than 1. ([Stackoverflow post](https://stackoverflow.com/questions/40758562/can-anyone-explain-me-standardscaler#_=_))
+    - Good for normal distributed features
+    - Good for outliers
+    - Does not guarantee same scale for all features (commonly between -3 and +3)
+- **MaxAbsScaler**: Scale each feature by its maximum absolute value. This estimator scales and translates each feature individually such that the maximal absolute value of each feature in the training set will be 1.0. Values are between -1 and +1. ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MaxAbsScaler.html))
+- **MinMaxScalar**: Transforms features by scaling each feature to a given range. This estimator scales and translates each feature individually such that it is in the given range on the training set, e.g. between zero and one.  Values depend on the range given ([docs](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html)). 
+    - Good when non-Gaussian distribution and small variance.  
+    - Skew is kept
+    - Outliers are very impactful on the feature!
+- **RobustScalar**: much like the MinMaxScalar, but uses the IQR (inter quartile distance) instead of range.  This means the range will be larger than with MinMaxscalar, but is better for outliers.
+```python
+from sklearn.preprocessing import StandardScaler
+scaler = preprocessing.StandardScaler().fit(X_train)  
+from sklearn.preprocessing import MaxAbsScaler
+scaler = preprocessing.MaxAbsScaler().fit(X_train)   
+from sklearn.preprocessing import MinMaxScaler
+scaler = preprocessing.MinMaxScaler().fit(X_train) 
+
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+```
+
+### L1 regularisation Ridge regression (Lasso)
+High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking absolute value
+
+```python
+lregmodel = Lasso(alpha=0.1,tol=0.0001,fit_intercept=True)
+lregmodel.fit(X_train,y_train)
+lregmodel.score(X_test,y_test)
+```
+
+### L2 regularisation Ridge regression (Ridge)
+High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking square values
+
+```python
+lregmodel = Ridge(alpha=0.020,tol=0.0001,fit_intercept=True)
+lregmodel.fit(X_train,y_train)
+lregmodel.score(X_test,y_test)
 ```
 
 ## Machine learning models
@@ -93,6 +165,7 @@ output = regression_model.predict(feature_values.reshape(1,-1))
 y_predicted = model.predict(X_test)
 
 ## Mean Absolute Error
+## Actual meaningful average fault value
 from sklearn.metrics import mean_absolute_error
 MAE = mean_absolute_error(y_test,y_predicted)
 
@@ -101,6 +174,9 @@ from sklearn.metrics import mean_squared_error
 MSE = mean_squared_error(y_test,y_predicted)
 
 ## coefficient of determination = r2 score
+## how many variation is defined by the model
+## perfect match would be R2=1
+## when average of output set is taking, then R2=0
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test,y_predicted)
 ```

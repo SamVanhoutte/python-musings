@@ -47,11 +47,21 @@ sns.pairplot(dataset)
 dataset.drop('COLUMN_NAME', axis=1, inplace=True) 
 ```
 
+### Replace values in columns
+This can be needed to replace male/female, yes/no values by 0 and 1.
+```python
+dataset['field'] = dataset['field'].replace('yes', 1)
+```
+
 ### One-hot encoding
 When features contain categories (text based), they can be translated into seperate feature (a feature per category), where the feature value will be 0 or 1.  This can be automated, using the following code:
 
 ```python
-dataset = pd.concat([dataset,pd.get_dummies(dataset['category_feature_name'], prefix='feat')],axis=1)
+# This inserts the category columns before the output column that we keep at the end
+dataset = pd.concat(
+    [dataset.iloc[:,0:dataset.columns.size-1],
+     pd.get_dummies(dataset['category_feature_name'], prefix='category_feature_name'),
+     dataset['outputvalue']],axis=1)
 dataset.drop(['category_feature_name'], axis=1, inplace=True)
 ```
 ### Add extra (high-norm) features
@@ -82,8 +92,12 @@ Using the '3-sigma' rule, saying that typically 99,7% of all data is between mea
 
 ```python
 from scipy import stats
+# this will replace all outliers and requires every feature to be numeric
 dataset = dataset[(np.abs(stats.zscore(dataset)) < 3).all(axis=1)]
-dataset.describe()
+# this will only focus on 1 feature
+dataset['field'] = dataset['field'][(np.abs(stats.zscore(dataset['field'])) < 3)]
+# deleting those outliers can be done with the following code
+dataset = dataset.drop(dataset[(np.abs(stats.zscore(dataset['field'])) > 3)].index)
 ```
 
 ### Create features and output sets of dataframe
@@ -125,7 +139,7 @@ X_test = scaler.transform(X_test)
 ```
 
 ### L1 regularisation Ridge regression (Lasso)
-High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking absolute value
+High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking absolute value.  Lasso regression not only helps in reducing over-fitting but it can help us in feature selection.
 
 ```python
 lregmodel = Lasso(alpha=0.1,tol=0.0001,fit_intercept=True)
@@ -134,7 +148,7 @@ lregmodel.score(X_test,y_test)
 ```
 
 ### L2 regularisation Ridge regression (Ridge)
-High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking square values
+Ridge regression shrinks the coefficients and it helps to reduce the model complexity and multi-collinearity.  The higher the alpha value, the more restriction on the coefficients. Low alpha > more generalization, coefficients are barely restricted.
 
 ```python
 lregmodel = Ridge(alpha=0.020,tol=0.0001,fit_intercept=True)
@@ -151,6 +165,11 @@ regression_model = linear_model.LinearRegression()
 regression_model.fit(X_train,y_train)
 ```
 
+The weights and lambda values of the model:
+```python
+print('coeffs: ',regression_model.coef_)
+print('intercept', regression_model.intercept_)
+```
 Predicting the output, using the model:
 ```python
 feature_values = np.array([0.3, 4, 5])
@@ -179,4 +198,21 @@ MSE = mean_squared_error(y_test,y_predicted)
 ## when average of output set is taking, then R2=0
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test,y_predicted)
+```
+
+Reusable function for model prediction
+```python
+def EvaluateModel(model, X_train, y_train, X_test, y_test, text):
+    model.fit(X_train,y_train)
+    test_score = model.score(X_test,y_test)
+    train_score = model.score(X_train,y_train)
+    print(text, 'test score:', '{:.4%}'.format(test_score), 'train score:', '{:.4%}'.format(train_score), 'difference:', '{:.4%}'.format((train_score - test_score)))
+```
+
+## Machine learning predict specific instance
+
+```python
+input = np.array([0.11, 0, 12.03, 0.57])
+output = model.predict(input.reshape(1,-1))
+print('The prediction is:' , output[0])
 ```

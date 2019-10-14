@@ -9,10 +9,34 @@ dataset = pd.read_csv('mydatafile.csv')
 ```
 ## Data exploration
 
+### Show columns of a dataframe
+
+```python
+print(list(dataset.columns[:dataset.columns.size-1]))
+```
+
+### Show distinct values in a dataframe column
+
+```python
+dataset.colname.unique()
+```
+
 ### Show average, mean, etc per column
 Using the describe method
 ```python
 dataset.describe()
+```
+
+### Plot histograms of important datafields in the dataset
+Plotting them by this function
+
+```python
+def PlotColumns(columnnames, gridsize):
+    f, axes = plt.subplots(gridsize, gridsize, figsize=(gridsize**2, gridsize**2), sharex=False)
+    it = 0
+    for col in columnsnames:
+        sns.distplot( dataset[col] , color="skyblue", ax=axes[math.floor(it /gridsize), it % gridsize])
+        it += 1
 ```
 
 ### Show correlation between different features of a dataset
@@ -51,6 +75,8 @@ dataset.drop('COLUMN_NAME', axis=1, inplace=True)
 This can be needed to replace male/female, yes/no values by 0 and 1.
 ```python
 dataset['field'] = dataset['field'].replace('yes', 1)
+#alternative option
+dataset.sex = dataset['sex'].replace(['F','M'],[1,0])
 ```
 
 ### One-hot encoding
@@ -142,6 +168,7 @@ X_test = scaler.transform(X_test)
 High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking absolute value.  Lasso regression not only helps in reducing over-fitting but it can help us in feature selection.
 
 ```python
+from sklearn.linear_model import Lasso
 lregmodel = Lasso(alpha=0.1,tol=0.0001,fit_intercept=True)
 lregmodel.fit(X_train,y_train)
 lregmodel.score(X_test,y_test)
@@ -151,6 +178,7 @@ lregmodel.score(X_test,y_test)
 Ridge regression shrinks the coefficients and it helps to reduce the model complexity and multi-collinearity.  The higher the alpha value, the more restriction on the coefficients. Low alpha > more generalization, coefficients are barely restricted.
 
 ```python
+from sklearn.linear_model import Ridge
 lregmodel = Ridge(alpha=0.020,tol=0.0001,fit_intercept=True)
 lregmodel.fit(X_train,y_train)
 lregmodel.score(X_test,y_test)

@@ -15,7 +15,7 @@ Install the following packages, with pip3 install
 
 ## Source files description
 
-__Genetics__: [genetics.py](../src/06-traveling-sales-man/genetics.py)
+__Genetics__: [genetics.py](../src/algorithms/06-traveling-sales-man/genetics.py)
 
 In this file, the actual "generic" classes are being used, without the city/route specific logic.  This approach would allow to have other algorithms, with different principles also used, as long as ordered sequences are used in the different individuals 
 
@@ -40,14 +40,14 @@ In this file, the actual "generic" classes are being used, without the city/rout
     - These new individuals are created by randomly have two individuals from the maating pool to breed a new individual.
   - `survival_of_the_fittest(self, generation_count: int = 15)` : this method will take the initial start population and breed a number of generations in order to keep the best population at that time 
 
-__Route__: [route.py](../src/06-traveling-sales-man/route.py)
+__Route__: [route.py](../src/algorithms/06-traveling-sales-man/route.py)
 
 In this file, the different abstract methods for an Individual are implemented. 
 
 - The fitness is calculated by adding distances between every city (taking the sequence in account) and then the inverse is taking, making sure the highest fitness will be for the shortest route.
 - The mating process is implemented by taking a random part of the first parent (30% of the length) and by adding the remaining cities in sequence they appear in the second parent.  For this, some basic array operations are used.
 
-__City__: [city.py](../src/06-traveling-sales-man/city.py)
+__City__: [city.py](../src/algorithms/06-traveling-sales-man/city.py)
 
 In this file, the city properties are kept, and the city is implemented as a Gene.  A name, the longitude, latitude and the height (for 3-d purposes) are being used.
 

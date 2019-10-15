@@ -15,14 +15,14 @@ Install the following packages, with pip3 install
 
 ## Source files description
 
-__Priority Queue__: [priority_queue.py](../src/07-eight-puzzle-game/priority_queue.py)
+__Priority Queue__: [priority_queue.py](../src/algorithms/07-eight-puzzle-game/priority_queue.py)
 
 In this file, I've made an implementation of a priority queue with peek/lock capabilities that sorts (and pops) messages based on the priority they get tagged with
 
-__Puzzle__: [puzzle.py](../src/07-eight-puzzle-game/puzzle.py)
+__Puzzle__: [puzzle.py](../src/algorithms/07-eight-puzzle-game/puzzle.py)
 
 This file contains all methods and implementations to calculate moves, simulate moves and render the game board
 
-__Jigsaw__: [jigsaw.py](../src/07-eight-puzzle-game/jigsaw.py)
+__Jigsaw__: [jigsaw.py](../src/algorithms/07-eight-puzzle-game/jigsaw.py)
 
 Contains the implementation for the A* algorithm and has an implementation to time and plot the different evaluation methods

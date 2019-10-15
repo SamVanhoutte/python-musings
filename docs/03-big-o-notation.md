@@ -4,7 +4,7 @@ This sample shows a generic class that can be used to analyze algorithms and plo
 
 In order to analyse it, an array of 'n-values' has to be built and given to a lambda(x) that calls the actual algorithm to be tested.  The class also allows for data generation, in this case the random generation of an RGB image of a given width/height.
 
-## [bigo.py](../src/03-big-o-notation/bigo.py)
+## [bigo.py](../src/algorithms/03-big-o-notation/bigo.py)
 
 This file measures the time to execute the algorithms, and plots the impact of N on the duration.  It uses the timeit module that actually executes the lambda function to be tested.  The median value is taken and added as y-value to the plot, where the n-values are plotted on the x-axis.
 
@@ -25,7 +25,7 @@ This method generates a random RGB image as a numpy array
 - `width`: the width of the image in pixels
 - `height`: the height of the image in pixels
 
-## [algorithm_analysis.py](../src/03-big-o-notation/algorithm_analysis.py)
+## [algorithm_analysis.py](../src/algorithms/03-big-o-notation/algorithm_analysis.py)
 
 This file is testing 3 algorithms for the big-O performance test
 

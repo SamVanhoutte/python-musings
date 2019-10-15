@@ -11,9 +11,9 @@ Install the following packages, with pip3 install
 
 ## Source files description
 
-__Algorithms__: [graphsearch.py](../src/04-graph-algorithms/graphsearch.py)
+__Algorithms__: [graphsearch.py](../src/algorithms/04-graph-algorithms/graphsearch.py)
 
-In this file, the 3 different algorithms are being defined, leveraging the graph class, as defined in the [graph.py](../src/04-graph-algorithms/graph.py) file.
+In this file, the 3 different algorithms are being defined, leveraging the graph class, as defined in the [graph.py](../src/algorithms/04-graph-algorithms/graph.py) file.
 These are the most important methods:
 
 - `walk_depth_first(maze, start_vertex_id, target_vertex_id, max_depth = 5)`
@@ -37,11 +37,11 @@ These are the most important methods:
   - `target_vertex_id`: the id of the target node the algorithm should navigate to
   - `max_depth`: not used at the moment
 
-__Graph object__: [graphy.py](../src/04-graph-algorithms/graph.py)
+__Graph object__: [graphy.py](../src/algorithms/04-graph-algorithms/graph.py)
 
 This file contains the different classes that are being used to represent a graph.  It uses the adjacant matrix to store all links between the different vertices.  Every edge can get a weight (which is especially used in the Dijkstra algorithm)
 
-__Unit tests__: [test_graph.py](../src/04-graph-algorithms/test_graph.py)
+__Unit tests__: [test_graph.py](../src/algorithms/04-graph-algorithms/test_graph.py)
 
 This file contains unit tests to test the different algorithms with different combinations of the mazes, edges and nodes.
 

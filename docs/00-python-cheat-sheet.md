@@ -21,6 +21,14 @@ print(list(dataset.columns[:dataset.columns.size-1]))
 dataset.colname.unique()
 ```
 
+### Get distribution (count) per specific column value
+This is often used to check if a data set (to train a model) is evenly distributed for the output values
+
+```python
+from collections import Counter
+Counter(dataset['Column'])
+```
+
 ### Show average, mean, etc per column
 Using the describe method
 ```python
@@ -31,12 +39,15 @@ dataset.describe()
 Plotting them by this function
 
 ```python
+import math
 def PlotColumns(columnnames, gridsize):
     f, axes = plt.subplots(gridsize, gridsize, figsize=(gridsize**2, gridsize**2), sharex=False)
     it = 0
-    for col in columnsnames:
+    for col in columnnames:
         sns.distplot( dataset[col] , color="skyblue", ax=axes[math.floor(it /gridsize), it % gridsize])
         it += 1
+
+PlotColumns(dataset.columns, 4)
 ```
 
 ### Show correlation between different features of a dataset
@@ -64,6 +75,16 @@ sns.pairplot(dataset)
 
 ## Feature engineering
 
+### Remove zero-values from a dataset
+List wise deletion makes sure that records get deleted when they contain 0 as a numeric value.  This can be done by column.
+
+```python
+# mark zero values as missing or NaN
+dataset[['Column1','Column2']] = dataset[['Column1','Column2']].replace(0, np.NaN)
+# drop rows with missing values
+dataset.dropna(inplace=True)
+```
+
 ### Remove a column from a dataset
 ```python
 #inplace updates the dataframe 
@@ -71,12 +92,18 @@ sns.pairplot(dataset)
 dataset.drop('COLUMN_NAME', axis=1, inplace=True) 
 ```
 
+### Rename columns in a dataset
+```python
+dataset.rename(columns={'olccol1': 'newcol1', 'oldcol2': 'newcol2'}, inplace=True)
+```
+
+
 ### Replace values in columns
 This can be needed to replace male/female, yes/no values by 0 and 1.
 ```python
 dataset['field'] = dataset['field'].replace('yes', 1)
 #alternative option
-dataset.sex = dataset['sex'].replace(['F','M'],[1,0])
+dataset.sex = dataset.sex.replace(['F','M'],[1,0])
 ```
 
 ### One-hot encoding
@@ -88,6 +115,12 @@ dataset = pd.concat(
     [dataset.iloc[:,0:dataset.columns.size-1],
      pd.get_dummies(dataset['category_feature_name'], prefix='category_feature_name'),
      dataset['outputvalue']],axis=1)
+dataset.drop(['category_feature_name'], axis=1, inplace=True)
+```
+
+```python
+# Alternative
+dataset.append(pd.get_dummies(dataset['category_feature_name'], prefix='category_feature_name'))
 dataset.drop(['category_feature_name'], axis=1, inplace=True)
 ```
 ### Add extra (high-norm) features
@@ -120,6 +153,9 @@ Using the '3-sigma' rule, saying that typically 99,7% of all data is between mea
 from scipy import stats
 # this will replace all outliers and requires every feature to be numeric
 dataset = dataset[(np.abs(stats.zscore(dataset)) < 3).all(axis=1)]
+# showing the stats of columns that contain outliers is done through this
+metadata = dataset.describe().transpose()
+metadata.loc[(metadata['min'] < (metadata['mean'] - 3 * metadata['std'])) | (metadata['max'] > (metadata['mean'] + 3 * metadata['std']))]
 # this will only focus on 1 feature
 dataset['field'] = dataset['field'][(np.abs(stats.zscore(dataset['field'])) < 3)]
 # deleting those outliers can be done with the following code
@@ -204,6 +240,26 @@ feature_values = np.array([0.3, 4, 5])
 output = regression_model.predict(feature_values.reshape(1,-1))
 # This returns an numpy.ndarray with all output values
 ```
+
+### Logistic regression (classification)
+
+```python
+from sklearn import linear_model
+# C = inverse of regularization strength.  Smaller values result in stronger regularization
+# Different solvers : https://stackoverflow.com/questions/38640109/logistic-regression-python-solvers-defintions
+logreg = linear_model.LogisticRegression(C=1, solver='lbfgs') 
+logreg.fit(X, y)
+
+print('coefficiënten: ',logreg.coef_)
+print('intercept:',logreg.intercept_)
+
+y_pred = logreg.predict(X_test)
+print(classification_report(y_test,y_pred))
+print(accuracy_score(y_test,y_pred)*100)
+print(confusion_matrix(y_test,y_pred))
+```
+
+
 
 ## Machine learning model evaluation
 

@@ -3,10 +3,24 @@
 ## Data access
 
 ### Read data from csv file
+
 Using panda
+
 ```python
 dataset = pd.read_csv('mydatafile.csv')
 ```
+
+## Very basic Python things
+
+### Implementing a for loop with steps
+
+The step parameter is optional and defaults to 1
+
+```python
+for value in range (start, stop[, step]):
+    print(value)
+```
+
 ## Data exploration
 
 ### Show columns of a dataframe
@@ -30,12 +44,15 @@ Counter(dataset['Column'])
 ```
 
 ### Show average, mean, etc per column
+
 Using the describe method
+
 ```python
 dataset.describe()
 ```
 
 ### Plot histograms of important datafields in the dataset
+
 Plotting them by this function
 
 ```python
@@ -53,13 +70,17 @@ PlotColumns(dataset.columns, 4)
 ### Show correlation between different features of a dataset
 
 #### By numbers in a grid
+
 Use the corr() method, you get a table with all values.
+
 ```python
 dataset.corr()
 ```
 
 #### By a heatmap with colors
+
 A heatmap will make things more visual
+
 ```python
 f, ax = plt.subplots(figsize=(10, 8))
 corr = dataset.corr()
@@ -68,6 +89,7 @@ sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_pa
 <img src="./imgs/cheat-heatmap.png" height="200" />
 
 #### By a pairplot, visually showing how fields behave around each other
+
 ```python
 sns.pairplot(dataset)
 ```
@@ -86,6 +108,7 @@ dataset.dropna(inplace=True)
 ```
 
 ### Remove a column from a dataset
+
 ```python
 #inplace updates the dataframe 
 # axis=1 means column (axis=0 means row)
@@ -99,7 +122,9 @@ dataset.rename(columns={'olccol1': 'newcol1', 'oldcol2': 'newcol2'}, inplace=Tru
 
 
 ### Replace values in columns
+
 This can be needed to replace male/female, yes/no values by 0 and 1.
+
 ```python
 dataset['field'] = dataset['field'].replace('yes', 1)
 #alternative option
@@ -107,6 +132,7 @@ dataset.sex = dataset.sex.replace(['F','M'],[1,0])
 ```
 
 ### One-hot encoding
+
 When features contain categories (text based), they can be translated into seperate feature (a feature per category), where the feature value will be 0 or 1.  This can be automated, using the following code:
 
 ```python
@@ -116,6 +142,12 @@ dataset = pd.concat(
      pd.get_dummies(dataset['category_feature_name'], prefix='category_feature_name'),
      dataset['outputvalue']],axis=1)
 dataset.drop(['category_feature_name'], axis=1, inplace=True)
+
+# This is a function to be reused that adds the new columns at the end of the dataframe and removes the original one
+def OneHotEncode(df, columnName):
+    df = pd.concat([df, pd.get_dummies(dataset[columnName], prefix=columnName)],axis=1)
+    df.drop([columnName], axis=1, inplace=True)
+    return df
 ```
 
 ```python
@@ -123,7 +155,9 @@ dataset.drop(['category_feature_name'], axis=1, inplace=True)
 dataset.append(pd.get_dummies(dataset['category_feature_name'], prefix='category_feature_name'))
 dataset.drop(['category_feature_name'], axis=1, inplace=True)
 ```
+
 ### Add extra (high-norm) features
+
 By adding new features that are combination of each other (distance, surface, weekday), it's possible to implement feature expansion.  
 
 ```python
@@ -147,6 +181,7 @@ X_test_poly = poly.transform(X_test)
 ```
 
 ### Remove outliers
+
 Using the '3-sigma' rule, saying that typically 99,7% of all data is between mean and 3*stddev.
 
 ```python
@@ -163,19 +198,25 @@ dataset = dataset.drop(dataset[(np.abs(stats.zscore(dataset['field'])) > 3)].ind
 ```
 
 ### Create features and output sets of dataframe
+
 Easiest is to take the column for the output as y and drop it to keep the X
+
 ```python
 y = dataset.OutputColumn.values
 X = dataset.drop(['OutputColumn'],axis=1)
 ```
 
 ### Split data in training and test set
+
 Using the standard function train_test_split:
 Important that the randomization will be used to shift data around (except with time series)
+
 ```python
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
 ```
+
 ### Normalize values
+
 Having all feature in the same scale, will make the performance of the Gradient Descent much faster
 
 - **StandardScalar**: The idea behind StandardScaler is that it will transform your data such that its distribution will have a mean value 0 and standard deviation of 1. Given the distribution of the data, each value in the dataset will have the sample mean value subtracted, and then divided by the standard deviation of the whole dataset. Values can be negative, positive and more than 1. ([Stackoverflow post](https://stackoverflow.com/questions/40758562/can-anyone-explain-me-standardscaler#_=_))
@@ -188,6 +229,7 @@ Having all feature in the same scale, will make the performance of the Gradient 
     - Skew is kept
     - Outliers are very impactful on the feature!
 - **RobustScalar**: much like the MinMaxScalar, but uses the IQR (inter quartile distance) instead of range.  This means the range will be larger than with MinMaxscalar, but is better for outliers.
+
 ```python
 from sklearn.preprocessing import StandardScaler
 scaler = preprocessing.StandardScaler().fit(X_train)  
@@ -201,6 +243,7 @@ X_test = scaler.transform(X_test)
 ```
 
 ### L1 regularisation Ridge regression (Lasso)
+
 High value can be underfitting - low value of alpha can be overfitting.  Can even exclude certain features (lambda would be 0) , taking absolute value.  Lasso regression not only helps in reducing over-fitting but it can help us in feature selection.
 
 ```python
@@ -211,6 +254,7 @@ lregmodel.score(X_test,y_test)
 ```
 
 ### L2 regularisation Ridge regression (Ridge)
+
 Ridge regression shrinks the coefficients and it helps to reduce the model complexity and multi-collinearity.  The higher the alpha value, the more restriction on the coefficients. Low alpha > more generalization, coefficients are barely restricted.
 
 ```python
@@ -223,18 +267,23 @@ lregmodel.score(X_test,y_test)
 ## Machine learning models
 
 ### Linear regression
+
 Fitting the model:
+
 ```python
 regression_model = linear_model.LinearRegression()
 regression_model.fit(X_train,y_train)
 ```
 
 The weights and lambda values of the model:
+
 ```python
 print('coeffs: ',regression_model.coef_)
 print('intercept', regression_model.intercept_)
 ```
+
 Predicting the output, using the model:
+
 ```python
 feature_values = np.array([0.3, 4, 5])
 output = regression_model.predict(feature_values.reshape(1,-1))
@@ -285,6 +334,7 @@ r2 = r2_score(y_test,y_predicted)
 ```
 
 Reusable function for model prediction
+
 ```python
 def EvaluateModel(model, X_train, y_train, X_test, y_test, text):
     model.fit(X_train,y_train)

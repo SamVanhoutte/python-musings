@@ -2,9 +2,9 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./src/01-minimal-edit-distance",
+        ".",
         "-p",
-        "test*.py"
+        "*test*.py"
     ],
     "python.testing.pytestEnabled": true,
     "python.testing.nosetestsEnabled": false,
@@ -13,9 +13,12 @@
     "python.linting.enabled": true,
     "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3",
     "python.testing.pytestArgs": [
-        "."
+        "src"
     ],
     "pythonTestExplorer.testFramework": "pytest",
     "python.testing.cwd": "",
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.testing.nosetestArgs": [
+        "src"
+    ]
 }

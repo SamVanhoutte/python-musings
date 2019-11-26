@@ -116,8 +116,15 @@ dataset.drop('COLUMN_NAME', axis=1, inplace=True)
 ```
 
 ### Rename columns in a dataset
+
 ```python
 dataset.rename(columns={'olccol1': 'newcol1', 'oldcol2': 'newcol2'}, inplace=True)
+```
+
+### Add calculated columns to a dataset
+
+```python
+dataset['NewColumn'] = dataset['ExistingColumn'].apply(functionname)
 ```
 
 
@@ -263,6 +270,48 @@ lregmodel = Ridge(alpha=0.020,tol=0.0001,fit_intercept=True)
 lregmodel.fit(X_train,y_train)
 lregmodel.score(X_test,y_test)
 ```
+
+## Natural language processing basics
+
+### Clean and stem text
+
+The following snippet is a reusable function that cleans and stems an input text
+
+```python
+#Generic function
+def CleanText(text, language = 'en', minwordLength = 3):
+    # remove html
+    text = BeautifulSoup(str(text),"html.parser" ).get_text()
+
+    # remove non-letters
+    text = re.sub("[^a-zA-Z']", " ", str(text)) 
+
+    # convert to lower-case
+    text = text.lower()
+
+    # remove stop words
+    stops = set(stopwords.words(language)) 
+    stemmer = SnowballStemmer(language)
+
+    cleanText = ' '
+
+    for w in text.split():
+        # Store in temporary variable
+        currentWord = w
+        # Only continue if not a stop word
+        if currentWord not in stops :
+            # Stem the word (back to the root of the word)
+            currentWord = stemmer.stem(currentWord)
+            # Only add when the root of the word is at least the minimum length
+            if len(currentWord) >= minwordLength:  
+                cleanText = cleanText + currentWord + ' '
+
+    return cleanText
+
+# Clean a column of a dataset
+dataset = dataset.columnname.apply(CleanText)
+```
+
 
 ## Machine learning models
 

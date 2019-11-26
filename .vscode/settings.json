@@ -11,7 +11,7 @@
     "python.testing.unittestEnabled": false,
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3",
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python36_64\\python.exe",
     "python.testing.pytestArgs": [
         "src"
     ],

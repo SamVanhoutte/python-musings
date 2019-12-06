@@ -77,6 +77,18 @@ Use the corr() method, you get a table with all values.
 dataset.corr()
 ```
 
+Use the corr() method, you can also take two columns from a dataframe to see the correlation
+
+```python
+dataset.column1.corr(dataset.column2)
+```
+
+And typically, it is interesting to see correlation of features, towards the output features.  As in the following
+
+```python
+dataset[dataset.columns].corr()['OutputColumn'][:].sort_values()
+```
+
 #### By a heatmap with colors
 
 A heatmap will make things more visual
@@ -136,6 +148,8 @@ This can be needed to replace male/female, yes/no values by 0 and 1.
 dataset['field'] = dataset['field'].replace('yes', 1)
 #alternative option
 dataset.sex = dataset.sex.replace(['F','M'],[1,0])
+#category data type
+dataset.sex = dataset.sex.astype('category').cat.codes
 ```
 
 ### One-hot encoding
@@ -399,3 +413,4 @@ input = np.array([0.11, 0, 12.03, 0.57])
 output = model.predict(input.reshape(1,-1))
 print('The prediction is:' , output[0])
 ```
+

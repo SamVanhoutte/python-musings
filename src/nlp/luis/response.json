@@ -1,0 +1,28 @@
+{
+    "query": "Ik wil een vlucht boeken van Kortrijk naar Luik",
+    "prediction": {
+        "topIntent": "travel.flight",
+        "intents": {
+            "travel.flight": {
+                "score": 0.9714881
+            }
+        },
+        "entities": {
+            "City": [
+                [
+                    "West Vlaanderen"
+                ]
+            ],
+            "Origin": [
+                [
+                    "KJK"
+                ]
+            ],
+            "Destination": [
+                [
+                    "LGG"
+                ]
+            ]
+        }
+    }
+}

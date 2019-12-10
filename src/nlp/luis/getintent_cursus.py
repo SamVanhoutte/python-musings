@@ -2,9 +2,9 @@ import requests
 import json
 from typing import List
 
-key = '187de1ec376545f5a10420ba35abb3b0'
+key = ''
 endpoint = 'westus.api.cognitive.microsoft.com' 
-appId = 'be3f57e3-52bc-4408-9be3-f711d816b091'
+appId = ''
 
 
 class Intent(object):

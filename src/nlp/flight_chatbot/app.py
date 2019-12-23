@@ -15,7 +15,8 @@ from botbuilder.core import (
 )
 from botbuilder.schema import Activity, ActivityTypes
 
-from bots import WelcomeUserBot
+from bots import FlightBookingBot
+
 
 # Create the loop and Flask app
 LOOP = asyncio.get_event_loop()
@@ -62,7 +63,7 @@ MEMORY = MemoryStorage()
 USER_STATE = UserState(MEMORY)
 
 # Create the Bot
-BOT = WelcomeUserBot(USER_STATE)
+BOT = FlightBookingBot(USER_STATE, '', '', 'westus.api.cognitive.microsoft.com')
 
 # Listen for incoming requests on /api/messages.
 @APP.route("/api/messages", methods=["POST"])

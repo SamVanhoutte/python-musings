@@ -1,0 +1,508 @@
+{
+  "luis_schema_version": "4.0.0",
+  "versionId": "0.1",
+  "name": "Conversational03",
+  "desc": "First application for conversational AI",
+  "culture": "nl-nl",
+  "tokenizerVersion": "1.0.0",
+  "intents": [
+    {
+      "name": "None"
+    },
+    {
+      "name": "travel.flight"
+    },
+    {
+      "name": "travel.hotel"
+    },
+    {
+      "name": "travel.passengercount"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [
+    {
+      "name": "Airport",
+      "subLists": [
+        {
+          "canonicalForm": "ANR",
+          "list": [
+            "Antwerp",
+            "Antwerpen",
+            "Deurne"
+          ]
+        },
+        {
+          "canonicalForm": "OST",
+          "list": [
+            "Brugge",
+            "Oostende"
+          ]
+        },
+        {
+          "canonicalForm": "BRU",
+          "list": [
+            "Brussel",
+            "Brussels",
+            "Zaventem"
+          ]
+        },
+        {
+          "canonicalForm": "CRL",
+          "list": [
+            "Charleroi",
+            "Brussels south"
+          ]
+        },
+        {
+          "canonicalForm": "KJK",
+          "list": [
+            "Kortrijk",
+            "Wevelgem",
+            "kort rijk"
+          ]
+        },
+        {
+          "canonicalForm": "LGG",
+          "list": [
+            "Luik",
+            "Liège"
+          ]
+        },
+        {
+          "canonicalForm": "OBL",
+          "list": [
+            "Zoersel",
+            "Oostmalle"
+          ]
+        }
+      ],
+      "roles": [
+        "Origin",
+        "Destination"
+      ]
+    },
+    {
+      "name": "City",
+      "subLists": [
+        {
+          "canonicalForm": "Antwerpen",
+          "list": [
+            "Aartselaar",
+            "Arendonk",
+            "Baarle-Hertog",
+            "Balen",
+            "Beerse",
+            "Berlaar",
+            "Boechout",
+            "Bonheiden",
+            "Boom",
+            "Bornem",
+            "Borsbeek",
+            "Brasschaat",
+            "Brecht",
+            "Dessel",
+            "Duffel",
+            "Edegem",
+            "Essen",
+            "Geel",
+            "Grobbendonk",
+            "Heist-op-den-Berg",
+            "Hemiksem",
+            "Herentals",
+            "Herenthout",
+            "Herselt",
+            "Hoogstraten",
+            "Hove",
+            "Hulshout",
+            "Kalmthout",
+            "Kapellen",
+            "Kasterlee",
+            "Kontich",
+            "Laakdal",
+            "Lier",
+            "Lille",
+            "Lint",
+            "Malle",
+            "Mechelen",
+            "Meerhout",
+            "Merksplas",
+            "Mol",
+            "Mortsel",
+            "Niel",
+            "Nijlen",
+            "Olen",
+            "Oud-Turnhout",
+            "Putte",
+            "Puurs-Sint-Amands",
+            "Ranst",
+            "Ravels",
+            "Retie",
+            "Rijkevorsel",
+            "Rumst",
+            "Schelle",
+            "Schilde",
+            "Schoten",
+            "Sint-Katelijne-Waver",
+            "Stabroek",
+            "Turnhout",
+            "Vorselaar",
+            "Vosselaar",
+            "Westerlo",
+            "Wijnegem",
+            "Willebroek",
+            "Wommelgem",
+            "Wuustwezel",
+            "Zandhoven",
+            "Zoersel",
+            "Zwijndrecht"
+          ]
+        },
+        {
+          "canonicalForm": "West Vlaanderen",
+          "list": [
+            "Alveringem",
+            "Anzegem",
+            "Ardooie",
+            "Avelgem",
+            "Beernem",
+            "Blankenberge",
+            "Bredene",
+            "Brugge",
+            "Damme",
+            "De Haan",
+            "De Panne",
+            "Deerlijk",
+            "Dentergem",
+            "Diksmuide",
+            "Gistel",
+            "Harelbeke",
+            "Heuvelland",
+            "Hooglede",
+            "Houthulst",
+            "Ichtegem",
+            "Ieper",
+            "Ingelmunster",
+            "Izegem",
+            "Jabbeke",
+            "Knokke-Heist",
+            "Koekelare",
+            "Koksijde",
+            "Kortemark",
+            "Kortrijk",
+            "Kuurne",
+            "Langemark-Poelkapelle",
+            "Ledegem",
+            "Lendelede",
+            "Lichtervelde",
+            "Lo-Reninge",
+            "Menen",
+            "Mesen",
+            "Meulebeke",
+            "Middelkerke",
+            "Moorslede",
+            "Nieuwpoort",
+            "Oostende",
+            "Oostkamp",
+            "Oostrozebeke",
+            "Oudenburg",
+            "Pittem",
+            "Poperinge",
+            "Roeselare",
+            "Ruiselede",
+            "Spiere-Helkijn",
+            "Staden",
+            "Tielt",
+            "Torhout",
+            "Veurne",
+            "Vleteren",
+            "Waregem",
+            "Wervik",
+            "Wevelgem",
+            "Wielsbeke",
+            "Wingene",
+            "Zedelgem",
+            "Zonnebeke",
+            "Zuienkerke",
+            "Zwevegem",
+            "leuven",
+            "roeslare"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "Hotel",
+      "subLists": [
+        {
+          "canonicalForm": "Hyatt",
+          "list": [
+            "Hyat",
+            "Regency"
+          ]
+        },
+        {
+          "canonicalForm": "Hilton",
+          "list": [
+            "Doubletree",
+            "Double Tree"
+          ]
+        },
+        {
+          "canonicalForm": "Ibis",
+          "list": []
+        },
+        {
+          "canonicalForm": "Holiday inn",
+          "list": [
+            "Holiday in",
+            "Holiday Inn Express",
+            "Hix"
+          ]
+        },
+        {
+          "canonicalForm": "Airbnb",
+          "list": [
+            "AirBnb",
+            "Air b&b",
+            "Air B and B",
+            "Rbnb"
+          ]
+        },
+        {
+          "canonicalForm": "GenericHotel",
+          "list": [
+            "Hotel",
+            "Overnachting",
+            "Slaapplaats"
+          ]
+        },
+        {
+          "canonicalForm": "Bed & Breakfast",
+          "list": [
+            "bnb",
+            "b&b",
+            "chambre d'hote",
+            "chambre d'hôte",
+            "bed and breakfast",
+            "bed & breakfast"
+          ]
+        },
+        {
+          "canonicalForm": "Marriot",
+          "list": [
+            "Courtyard Inn",
+            "Marriot Courtyard"
+          ]
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "number",
+      "roles": [
+        "passengercount"
+      ]
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [
+    {
+      "pattern": "ik moet overnachten in {City}",
+      "intent": "travel.hotel"
+    },
+    {
+      "pattern": "ik wil vliegen van {Airport:Origin} naar {Airport:Destination}",
+      "intent": "travel.flight"
+    },
+    {
+      "pattern": "ik heb een {Hotel} nodig in {City}",
+      "intent": "travel.hotel"
+    },
+    {
+      "pattern": "ik heb een vlucht nodig naar {Airport:Destination} van uit {Airport:Origin}",
+      "intent": "travel.flight"
+    },
+    {
+      "pattern": "boek een vlucht van {Airport:Origin} naar {Airport:Destination}",
+      "intent": "travel.flight"
+    }
+  ],
+  "utterances": [
+    {
+      "text": "2 passagiers",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "3",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "3 mensen",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "4",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "5 mensen",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "boek me een hotel in harelbeke",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik heb een b&b nodig voor harelbeke",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik heb een vlucht nodig naar brussel vanuit charleroi",
+      "intent": "travel.flight",
+      "entities": [
+        {
+          "entity": "Airport",
+          "role": "Destination",
+          "startPos": 29,
+          "endPos": 35
+        },
+        {
+          "entity": "Airport",
+          "role": "Origin",
+          "startPos": 44,
+          "endPos": 52
+        }
+      ]
+    },
+    {
+      "text": "ik heb een vlucht nodig van kort rijk naar kort rijk",
+      "intent": "travel.flight",
+      "entities": [
+        {
+          "entity": "Airport",
+          "role": "Origin",
+          "startPos": 28,
+          "endPos": 36
+        },
+        {
+          "entity": "Airport",
+          "role": "Destination",
+          "startPos": 43,
+          "endPos": 51
+        }
+      ]
+    },
+    {
+      "text": "ik heb volgende week 3 nachten op hotel nodig in braschaat",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik moet overnachten in kortrijk",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik wil een ibis volgende week in ieper",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik wil een overnachting in roeslare",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik wil een vlucht boeken van luik naar brussel",
+      "intent": "travel.flight",
+      "entities": [
+        {
+          "entity": "Airport",
+          "role": "Origin",
+          "startPos": 29,
+          "endPos": 32
+        },
+        {
+          "entity": "Airport",
+          "role": "Destination",
+          "startPos": 39,
+          "endPos": 45
+        }
+      ]
+    },
+    {
+      "text": "ik wil in leuven slapen",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik wil vliegen van oostende naar luik",
+      "intent": "travel.flight",
+      "entities": [
+        {
+          "entity": "Airport",
+          "role": "Origin",
+          "startPos": 19,
+          "endPos": 26
+        },
+        {
+          "entity": "Airport",
+          "role": "Destination",
+          "startPos": 33,
+          "endPos": 36
+        }
+      ]
+    },
+    {
+      "text": "ik zoek een bnb in brecht",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "ik zoek een hotel voor antwerpen",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "is er in antwerpen een hotel vrij",
+      "intent": "travel.hotel",
+      "entities": []
+    },
+    {
+      "text": "met 8",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "met vijf personen",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "vier passagiers",
+      "intent": "travel.passengercount",
+      "entities": []
+    },
+    {
+      "text": "we zijn met 2",
+      "intent": "travel.passengercount",
+      "entities": []
+    }
+  ],
+  "settings": []
+}

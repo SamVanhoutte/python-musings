@@ -26,6 +26,8 @@ wheels/
 *.egg
 MANIFEST
 
+.DS_Store
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -115,3 +117,4 @@ src/analytics/01 measures of central tendency and dispersion/Opdracht_01_Centrum
 src/analytics/02 probability distribution/Sessie_02_Kansverdelingen_Opdracht_Sam_Vanhoutte.xlsx
 src/analytics/02 probability distribution/Sessie_02_Kansverdelingen_Opdracht_Sam_Vanhoutte.docx
 src/analytics/02 probability distribution/Sessie_02_Kansverdelingen_Opdracht_Sam_Vanhoutte.zip
+src/.DS_Store
